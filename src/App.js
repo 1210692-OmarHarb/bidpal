@@ -1,9 +1,10 @@
-import nav from "./components/nav";
+import Navigation from "./components/Navigation";
 
 function App() {
   return (
     <div className="App">
-      sdsds <nav />
+      hello
+      <Navigation />
     </div>
   );
 }
