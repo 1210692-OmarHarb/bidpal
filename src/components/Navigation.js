@@ -11,29 +11,19 @@ function Navigation() {
       <nav className="main-nav">
         <ul className="main-nav-list">
           <li>
-            <Link className="main-nav-link" to="/signin">
+            <a className="main-nav-link" href="#">
+              Help & Contact
+            </a>
+          </li>
+          <li>
+            <a className="main-nav-link" href="#">
+              Auction
+            </a>
+          </li>
+          <li>
+            <Link className="main-nav-link nav-cta" to="/signin">
               Sign in
             </Link>
-          </li>
-          <li>
-            <a className="main-nav-link" href="#">
-              Section 1
-            </a>
-          </li>
-          <li>
-            <a className="main-nav-link" href="#">
-              Section 2
-            </a>
-          </li>
-          <li>
-            <a className="main-nav-link" href="#">
-              Section 3
-            </a>
-          </li>
-          <li>
-            <a className="main-nav-link nav-cta" href="#">
-              Section 4
-            </a>
           </li>
         </ul>
       </nav>
