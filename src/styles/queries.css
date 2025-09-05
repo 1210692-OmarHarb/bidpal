@@ -1,30 +1,39 @@
 /* rem and em do NOT depend on html font-size in media queries! Instead, 1rem = 1em = 16px */
 
 /**************************/
+/* ABOVE 1344px (Default Desktop) - Explicitly set the base */
+/**************************/
+@media (min-width: 84.01em) {
+  html {
+    /* 10px / 16px = 0.625 = 62.5% */
+    font-size: 62.5%;
+  }
+}
+
+/**************************/
 /* BELOW 1344px (Smaller desktops) */
 /**************************/
-
 @media (max-width: 84em) {
-  .main {
+  html {
+    /* 10px / 16px = 0.625 = 62.5% */
+    font-size: 62.5%;
+  }
+
+  .hero {
     max-width: 120rem;
   }
 
   .heading-primary {
     font-size: 4.4rem;
   }
-
-  .gallery {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 /**************************/
 /* BELOW 1200px (Landscape Tablets) */
 /**************************/
-
 @media (max-width: 75em) {
   html {
-    /* 9px / 16px  */
+    /* 9px / 16px */
     font-size: 56.25%;
   }
 
@@ -41,42 +50,33 @@
     gap: 3.2rem;
   }
 
-  .main {
+  .hero {
     gap: 4.8rem;
-  }
-
-  .testimonials-container {
-    padding: 9.6rem 3.2rem;
   }
 }
 
 /**************************/
 /* BELOW 944px (Tablets) */
 /**************************/
-
 @media (max-width: 59em) {
   html {
     /* 8px / 16px = 0.5 = 50% */
     font-size: 50%;
   }
 
-  .main {
+  .hero {
     grid-template-columns: 1fr;
     padding: 0 8rem;
     gap: 6.4rem;
   }
 
-  .main-text-box,
-  .main-img-box {
+  .hero-text-box,
+  .hero-img-box {
     text-align: center;
   }
 
-  .main-img {
+  .hero-img {
     width: 60%;
-  }
-
-  .logos img {
-    height: 2.4rem;
   }
 
   /* MOBILE NAVIGATION */
@@ -95,15 +95,20 @@
     width: 100%;
     height: 100vh;
     transform: translateX(100%);
-
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.5s ease-in;
 
     /* Hide navigation */
+    /* Allows NO transitions at all */
+    /* display: none; */
+
+    /* 1) Hide it visually */
     opacity: 0;
+    /* 2) Make it unaccessible to mouse and keyboard */
     pointer-events: none;
+    /* 3) Hide it from screen readers */
     visibility: hidden;
   }
 
@@ -136,13 +141,7 @@
 /**************************/
 /* BELOW 704px (Smaller tablets) */
 /**************************/
-
 @media (max-width: 44em) {
-  .grid--3-cols,
-  .grid--4-cols {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .grid--footer {
     grid-template-columns: repeat(6, 1fr);
   }
@@ -162,16 +161,9 @@
 /**************************/
 /* BELOW 544px (Phones) */
 /**************************/
-
 @media (max-width: 34em) {
   .grid {
     row-gap: 4.8rem;
-  }
-
-  .grid--2-cols,
-  .grid--3-cols,
-  .grid--4-cols {
-    grid-template-columns: 1fr;
   }
 
   .btn,
@@ -180,12 +172,20 @@
     padding: 2.4rem 1.6rem;
   }
 
-  .logos img {
-    height: 1.2rem;
+  .section-main {
+    padding: 2.4rem 0 6.4rem 0;
+  }
+
+  .main {
+    padding: 0 3.2rem;
+  }
+
+  .main-img {
+    width: 80%;
   }
 }
 
-/* 
+/*
 - Font sizes (px)
 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
 
@@ -196,41 +196,6 @@
 /**************************/
 /* Fixing Safari flexbox gap */
 /**************************/
-
-/**************************/
-/* Reset for desktop screens */
-/**************************/
-
-@media (min-width: 60em) {
-  .main {
-    grid-template-columns: 1fr 1fr;
-    padding: 0;
-    gap: 9.6rem;
-  }
-
-  .main-nav {
-    position: static;
-    height: auto;
-    transform: none;
-    opacity: 1;
-    pointer-events: auto;
-    visibility: visible;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    background: none; /* remove mobile background */
-  }
-
-  .main-nav-list {
-    flex-direction: row;
-    gap: 3.2rem;
-  }
-
-  .grid--footer {
-    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr;
-  }
-}
-
 .no-flexbox-gap .main-nav-list li:not(:last-child) {
   margin-right: 4.8rem;
 }
@@ -245,10 +210,6 @@
 
 .no-flexbox-gap .footer-row div:not(:last-child) {
   margin-right: 6.4rem;
-}
-
-.no-flexbox-gap .social-links li:not(:last-child) {
-  margin-right: 2.4rem;
 }
 
 .no-flexbox-gap .footer-nav li:not(:last-child) {

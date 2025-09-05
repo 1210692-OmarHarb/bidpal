@@ -3,9 +3,9 @@ import React from "react";
 function Signin() {
   return (
     <main>
-      <section class="section-main">
-        <div class="main">
-          <div class="main-text-box">
+      <section class="section-hero">
+        <div class="hero">
+          <div class="hero-text-box">
             <h1 class="heading-primary">Create an Account</h1>
             <div className="signin-page">
               <form>
@@ -15,8 +15,8 @@ function Signin() {
               </form>
             </div>
           </div>
-          <div class="main-img-box">
-            <img src="img/hero.png" class="main-img" alt="auction?" />
+          <div class="hero-img-box">
+            <img src="img/hero.png" class="hero-img" alt="auction?" />
           </div>
         </div>
       </section>
