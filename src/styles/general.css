@@ -157,7 +157,7 @@ body {
 }
 
 .logo {
-  height: 32rem;
+  height: fit-content;
   width: auto;
   max-height: 24rem;
 }

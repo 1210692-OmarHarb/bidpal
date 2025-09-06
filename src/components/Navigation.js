@@ -16,9 +16,9 @@ function Navigation() {
             </a>
           </li>
           <li>
-            <a className="main-nav-link" href="#">
+            <Link className="main-nav-link " to="/homepage">
               Auction
-            </a>
+            </Link>
           </li>
           <li>
             <Link className="main-nav-link nav-cta" to="/signin">
