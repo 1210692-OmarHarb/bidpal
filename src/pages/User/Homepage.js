@@ -11,7 +11,7 @@ function Homepage() {
       <main>
         <hr></hr>
         <section className="section-hero home-page">
-          <div class="carousel">
+          <div class="hero carousel">
             <img
               src="/img/hero.jpg"
               className="main-list-img"
@@ -29,7 +29,7 @@ function Homepage() {
               </p>
             </blockquote>
 
-            <button class="btn btn--left">
+            <button class="btncta btn--left">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="btn-icon"
@@ -45,7 +45,7 @@ function Homepage() {
                 />
               </svg>
             </button>
-            <button class="btn btn--right">
+            <button class="btncta btn--right">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="btn-icon"
@@ -66,6 +66,40 @@ function Homepage() {
               <button class="dot">&nbsp;</button>
               <button class="dot">&nbsp;</button>
               <button class="dot">&nbsp;</button>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-featured">
+          <div class="feat-module">
+            <div class="feat-module-header">
+              <h2 class="heading-primary"></h2>
+            </div>
+            <div class="feat-module-filter">
+              <nav class="feat-module-filter-nav grid">
+                <ul class="feat-module-filter-nav-ul grid">
+                  <li>Live</li>
+                  <li>Ending Soon</li>
+                  <li>Upcoming</li>
+                </ul>
+              </nav>
+            </div>
+            <div class="feat-module-list">
+              <ul class="feat-module-list-ul grid">
+                <div class="product1">
+                  <li>Productone</li>
+                  <button>place bid</button>
+                </div>
+                <div class="product2">
+                  <li>Producttwo</li>
+                  <button>place bid</button>
+                </div>
+                <div class="product3">
+                  <li>Productthree</li>
+                  <button>place bid</button>
+                </div>
+                ... .. ...
+              </ul>
             </div>
           </div>
         </section>

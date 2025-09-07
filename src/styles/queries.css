@@ -173,7 +173,7 @@
   }
 
   .section-main {
-    padding: 2.4rem 0 6.4rem 0;
+    padding: 6.4rem 0 12.4rem 0;
   }
 
   .main {
@@ -182,6 +182,29 @@
 
   .main-img {
     width: 80%;
+  }
+
+  .hero.carousel {
+    height: 100%;
+
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero.carousel img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+  }
+
+  .testimonial {
+    margin-top: 1rem;
+  }
+  .btn--left,
+  .btn--right {
+    position: static; /* remove absolute positioning */
+    transform: none;
+    margin: 1rem;
   }
 }
 

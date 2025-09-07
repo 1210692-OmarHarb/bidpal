@@ -1,96 +1,93 @@
 .home-page {
   padding: 1.2rem 0 9.6rem 0;
 }
+
+/* HERO CAROUSEL */
 .carousel {
   max-width: 130rem;
   margin: 0 auto;
-  padding: 1.6rem 3.2rem;
+  padding: 2.4rem 4.8rem; /* more breathing space inside */
   background-color: #087f5b;
   border-radius: 8px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
+  position: relative;
+  display: flex;
+  gap: 2rem;
   align-items: center;
-  gap: 4.2rem;
 }
 
 .main-list-img {
-  height: 200px;
+  width: auto;
+  height: 20rem;
   border-radius: 8px;
-  transform: scale(1.2);
-
+  transform: scale(1.1);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
 }
 
 .testimonial-text {
-  font-size: 18px;
+  font-size: 1.8rem;
   font-weight: 500;
   line-height: 1.5;
-  margin-bottom: 32px;
+  margin-bottom: 3.2rem;
   color: #e6fcf5;
 }
 
 .testimonial-author {
-  font-size: 14px;
-  margin-bottom: 4px;
+  font-size: 1.4rem;
+  margin-bottom: 0.4rem;
   color: #c3fae8;
 }
 
 .testimonial-job {
-  font-size: 12px;
+  font-size: 1.2rem;
   color: #c3fae8;
 }
 
 /* CONTROLS */
-.btn {
+.btncta {
   background-color: #fff;
   border: none;
-  height: 40px;
-  width: 40px;
+  height: 4rem;
+  width: 4rem;
   border-radius: 50%;
   position: absolute;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .btn--left {
-  /* In relation to PARENTE ELEMENT */
-  left: 0;
+  left: 2rem; /* instead of hugging the edge */
   top: 50%;
-
-  /* In relation to ELEMENT ITSELF */
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
 }
 
 .btn--right {
-  right: 0;
+  right: 2rem; /* instead of hugging the edge */
   top: 50%;
-
-  transform: translate(50%, -50%);
+  transform: translateY(-50%);
 }
 
 .btn-icon {
-  height: 24px;
-  width: 24px;
+  height: 2.4rem;
+  width: 2.4rem;
   stroke: #087f5b;
 }
+
+/* DOTS NAV */
 .dots {
   position: absolute;
   left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 32px);
-
+  bottom: 1.6rem;
+  transform: translateX(-50%);
   display: flex;
-  gap: 12px;
+  gap: 1.2rem;
 }
 
 .dot {
-  height: 12px;
-  width: 12px;
+  height: 1.2rem;
+  width: 1.2rem;
   background-color: #fff;
   border: 2px solid #087f5b;
   border-radius: 50%;
@@ -99,4 +96,106 @@
 
 .dot--fill {
   background-color: #087f5b;
+}
+/* ************************************ */
+/* FEATURED AUCTIONS SECTION            */
+/* ************************************ */
+
+.section-featured {
+  background-color: #fdf2e9; /* subtle tint to separate from hero */
+  padding: 6.4rem 0;
+}
+
+.feat-module {
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 3.2rem;
+}
+
+.feat-module-header {
+  text-align: center;
+  margin-bottom: 3.2rem;
+}
+
+.feat-module-header .heading-primary {
+  font-size: 3.6rem;
+  font-weight: 700;
+  color: #333;
+}
+
+/* FILTER NAV */
+.feat-module-filter {
+  margin-bottom: 4.8rem;
+}
+
+.feat-module-filter-nav-ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 3.2rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.feat-module-filter-nav-ul li {
+  cursor: pointer;
+  padding: 0.8rem 1.6rem;
+  border-radius: 9px;
+  transition: all 0.3s;
+}
+
+.feat-module-filter-nav-ul li:hover {
+  background-color: #e8f5f1;
+  color: #148a6a;
+}
+
+/* PRODUCT LIST */
+.feat-module-list-ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  gap: 3.2rem;
+}
+
+.feat-module-list-ul > div {
+  background-color: #fff;
+  border-radius: 9px;
+  box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.05);
+  padding: 2.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.feat-module-list-ul li {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.6rem;
+}
+
+.feat-module-list-ul button {
+  background-color: #169976;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 1.2rem 2.4rem;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.feat-module-list-ul button:hover {
+  background-color: #148a6a;
+}
+
+/* MOBILE FIX */
+@media (max-width: 600px) {
+  .feat-module-filter-nav-ul {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
 }
