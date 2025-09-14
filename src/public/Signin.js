@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "../components/Navigation";
 
 function Signin() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <>
-      <Navigation />
+      <Navigation isLoggedIn={isLoggedIn} />
+
       <main>
         <section className="section-hero">
           <div class="hero">
@@ -58,7 +61,12 @@ function Signin() {
                     </span>
                   </div>
                   <div class="form-element-submit">
-                    <button type="submit">Continue</button>
+                    <button
+                      type="submit"
+                      onClick={() => setIsLoggedIn(!isLoggedIn)}
+                    >
+                      Continue
+                    </button>
                   </div>
                 </form>
               </div>

@@ -78,7 +78,13 @@
   .hero-img {
     width: 60%;
   }
+  .row1-img {
+    max-width: 100%;
+  }
 
+  .row2-images {
+    flex: 1 1 45%;
+  }
   /* MOBILE NAVIGATION */
   .btn-mobile-nav {
     display: block;
@@ -205,6 +211,24 @@
     position: static; /* remove absolute positioning */
     transform: none;
     margin: 1rem;
+  }
+
+  .images-row2 {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .row2-images {
+    flex: 1 1 100%;
+    max-width: 90%;
+  }
+}
+
+/* MOBILE FIX */
+@media (max-width: 600px) {
+  .feat-module-filter-nav-ul {
+    flex-direction: column;
+    gap: 1.2rem;
   }
 }
 

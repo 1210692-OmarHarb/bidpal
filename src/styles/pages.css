@@ -192,10 +192,33 @@
   background-color: #148a6a;
 }
 
-/* MOBILE FIX */
-@media (max-width: 600px) {
-  .feat-module-filter-nav-ul {
-    flex-direction: column;
-    gap: 1.2rem;
-  }
+/* ========================================== */
+/* AuctionPage */
+/* ========================================== */
+
+.image-row1 {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.4rem;
+}
+
+.row1-img {
+  width: 100%;
+  max-width: 80rem;
+  height: auto;
+  border-radius: 9px;
+  object-fit: cover;
+}
+
+.images-row2 {
+  display: flex;
+  justify-content: center;
+  gap: 1.6rem;
+}
+
+.row2-images {
+  flex: 1 1 10rem;
+  max-width: 10rem;
+  border-radius: 9px;
+  object-fit: cover;
 }
