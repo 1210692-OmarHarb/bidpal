@@ -7,6 +7,7 @@ import Signin from "./public/Signin";
 import Signup from "./public/Signup";
 import Homepage from "./pages/User/Homepage";
 import AuctionPage from "./pages/User/AuctionPage";
+import ProfilePage from "./pages/User/ProfilePage";
 
 import "./styles/general.css";
 import "./styles/queries.css";
@@ -21,6 +22,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/auctionpage" element={<AuctionPage />} />
+        <Route path="/profilepage" element={<ProfilePage />} />
       </Routes>
     </Router>
   );
