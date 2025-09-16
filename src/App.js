@@ -8,7 +8,12 @@ import Signup from "./public/Signup";
 import Homepage from "./pages/User/Homepage";
 import AuctionPage from "./pages/User/AuctionPage";
 import ProfilePage from "./pages/User/ProfilePage";
+import Auctions from "./pages/User/Auctions";
+import BidHistory from "./pages/User/BidHistory";
 
+import ManageAccounts from "./pages/Admin/ManageAccounts";
+import ReportsDashboard from "./pages/Admin/ReportsDashboard";
+import ValidateOrg from "./pages/Admin/ValidateOrg";
 import "./styles/general.css";
 import "./styles/queries.css";
 
@@ -23,6 +28,11 @@ function App() {
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/auctionpage" element={<AuctionPage />} />
         <Route path="/profilepage" element={<ProfilePage />} />
+        <Route path="/auctions" element={<Auctions />} />
+        <Route path="/bidhistory" element={<BidHistory />} />
+        <Route path="/manage-accounts" element={<ManageAccounts />} />
+        <Route path="/reports" element={<ReportsDashboard />} />
+        <Route path="/validate-org" element={<ValidateOrg />} />
       </Routes>
     </Router>
   );

@@ -106,7 +106,7 @@ body {
   font-family: "Rubik", sans-serif;
   line-height: 1;
   font-weight: 400;
-  color: #555;
+  color: #000;
 }
 
 .container {
@@ -165,9 +165,8 @@ body {
   align-items: center;
 }
 .logo {
-  height: fit-content;
-  width: auto;
-  max-height: 24rem;
+  height: 50;
+  width: 60px;
 }
 
 /*55555555555555555555555555555*/
@@ -605,4 +604,8 @@ input:invalid ~ .error-message {
 
 .user-form--new .main-nav-link:hover {
   background: #e0e0e0;
+}
+
+.devider {
+  margin: 64px 0px;
 }
