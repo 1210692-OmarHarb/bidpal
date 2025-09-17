@@ -11,6 +11,10 @@ import ProfilePage from "./pages/User/ProfilePage";
 import Auctions from "./pages/User/Auctions";
 import BidHistory from "./pages/User/BidHistory";
 
+import GroupsPage from "./pages/User/GroupsPage";
+import JoinGroupsPage from "./pages/User/JoinGroupsPage";
+import CreateGroupPage from "./pages/User/CreateGroupPage";
+
 import ManageAccounts from "./pages/Admin/ManageAccounts";
 import ReportsDashboard from "./pages/Admin/ReportsDashboard";
 import ValidateOrg from "./pages/Admin/ValidateOrg";
@@ -33,6 +37,9 @@ function App() {
         <Route path="/manage-accounts" element={<ManageAccounts />} />
         <Route path="/reports" element={<ReportsDashboard />} />
         <Route path="/validate-org" element={<ValidateOrg />} />
+        <Route path="/groupspage" element={<GroupsPage />} />
+        <Route path="/joingroupspage" element={<JoinGroupsPage />} />
+        <Route path="/creategrouppage" element={<CreateGroupPage />} />
       </Routes>
     </Router>
   );

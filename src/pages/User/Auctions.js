@@ -20,25 +20,40 @@ function Auctions() {
                     <p>Settings</p>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>Auctions</p>
+                    <p>Create Auction</p>
+                  </div>
+                  <div className="menu-box-nav-link">
+                    <p>My Auctions</p>
                   </div>
                 </li>
               </div>
-              <hr></hr>
+              <hr />
               <div className="menu-box">
                 <li className="menu-box-nav-header">
                   Payment
                   <div className="menu-box-nav-link">
-                    <p>Purshace history</p>
+                    <p>Purchase history</p>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>wishlist</p>
+                    <p>Wishlist</p>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>notifications</p>
+                    <p>Notifications</p>
                   </div>
                 </li>
               </div>
+              <div className="menu-box">
+                <li className="menu-box-nav-header">
+                  Groups
+                  <div className="menu-box-nav-link">
+                    <p>Create Group</p>
+                  </div>
+                  <div className="menu-box-nav-link">
+                    <p>My Group</p>
+                  </div>
+                </li>
+              </div>
+              <hr />
             </div>
             <div className="section-auctions">
               <h2 className="heading-secondary">Auction Search</h2>

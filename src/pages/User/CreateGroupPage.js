@@ -5,13 +5,13 @@ import Footer from "../../components/Footer";
 import "../../styles/general.css";
 import "../../styles/pages.css";
 
-function BidHistory() {
+function CreateGroupPage() {
   return (
     <>
       <Navigation />
       <main>
-        <section className="section personal-view">
-          <div className="hero personal-menu ">
+        <section className="section groups-view">
+          <div className="hero groups-menu">
             <div className="menu">
               <div className="menu-box">
                 <li className="menu-box-nav-header">
@@ -56,51 +56,38 @@ function BidHistory() {
               <hr />
             </div>
 
-            <div className="section-auctions">
-              <h2 className="heading-secondary">Bidding History</h2>
+            <div className="section-groups">
+              <h2 className="heading-secondary">Create a Group</h2>
+              <p className="sub-text">
+                You can only create **one group**. Once created, you will be the
+                admin and manage it under <b>My Group</b>.
+              </p>
 
-              <table className="auction-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Bid Price</th>
-                    <th>Marketplace</th>
-                    <th>Ended?</th>
-                    <th>Winner</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>2025-09-10</td>
-                    <td>Nike Air Jordan</td>
-                    <td>$250</td>
-                    <td>Seller123</td>
-                    <td>No</td>
-                    <td>—</td>
-                  </tr>
-                  <tr>
-                    <td>2025-08-20</td>
-                    <td>Louis Vuitton Bag</td>
-                    <td>$700</td>
-                    <td>LuxuryHub</td>
-                    <td>
-                      <span className="ended-yes">Yes</span>
-                    </td>
-                    <td>User_Alice</td>
-                  </tr>
-                  <tr>
-                    <td>2025-07-05</td>
-                    <td>Bearbrick Camo Toy</td>
-                    <td>$400</td>
-                    <td>ToyCollectibles</td>
-                    <td>
-                      <span className="ended-no">No</span>
-                    </td>
-                    <td>User_Bob</td>
-                  </tr>
-                </tbody>
-              </table>
+              <form className="create-group-form">
+                <div className="form-element">
+                  <label>Group Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter your group name"
+                    required
+                  />
+                </div>
+
+                <div className="form-element">
+                  <label>Description</label>
+                  <textarea
+                    placeholder="Describe your group (e.g., Sneaker Collectors, Vintage Electronics)"
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="form-element-submit">
+                  <button type="submit" className="create-btn">
+                    Create Group
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </section>
@@ -110,4 +97,4 @@ function BidHistory() {
   );
 }
 
-export default BidHistory;
+export default CreateGroupPage;

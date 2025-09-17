@@ -1,104 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../../styles/general.css";
 import "../../styles/queries.css";
 import "../../styles/pages.css";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
+
 function Homepage() {
+  const [auctionstest, setAuctions] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost/bidpal-api/getHomepageAuctions.php")
+      .then((res) => setAuctions(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <>
       <Navigation />
       <main>
-        <hr></hr>
+        <hr />
+
         <section className="section-hero home-page">
-          <div class="hero carousel">
+          <div className="hero carousel">
             <img
               src="/img/hero.jpg"
               className="main-list-img"
-              alt="Maria de Almeida"
+              alt="Auction banner"
             />
-            <blockquote class="testimonial">
-              <p class="testimonial-text">
-                "Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Officia nesciunt aliquid ex atque quibusdam. Rerum officia unde
-                suscipit quo sunt hic illo fugit."
+            <blockquote className="testimonial">
+              <p className="testimonial-text">
+                "BidPal – Join live auctions, place real-time bids, and win
+                exclusive items!"
               </p>
-              <p class="testimonial-author">Maria de Almeida</p>
-              <p class="testimonial-job">
-                Senior Product Manager at EDP Comercial
-              </p>
+              <p className="testimonial-author">BidPal Community</p>
+              <p className="testimonial-job">Your trusted auction platform</p>
             </blockquote>
-
-            <button class="btncta btn--left">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="btn-icon"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-            <button class="btncta btn--right">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="btn-icon"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
-            <div class="dots">
-              <button class="dot dot--fill">&nbsp;</button>
-              <button class="dot">&nbsp;</button>
-              <button class="dot">&nbsp;</button>
-              <button class="dot">&nbsp;</button>
-            </div>
           </div>
         </section>
 
         <section className="section-featured">
-          <div class="feat-module">
-            <div class="feat-module-header">
-              <h2 class="heading-primary"></h2>
+          <div className="feat-module">
+            <div className="feat-module-header">
+              <h2 className="heading-primary">🔥 Featured Auctions</h2>
             </div>
-            <div class="feat-module-filter">
-              <nav class="feat-module-filter-nav grid">
-                <ul class="feat-module-filter-nav-ul grid">
+
+            <div className="feat-module-filter">
+              <nav className="feat-module-filter-nav grid">
+                <ul className="feat-module-filter-nav-ul grid">
                   <li>Live</li>
                   <li>Ending Soon</li>
                   <li>Upcoming</li>
                 </ul>
               </nav>
             </div>
-            <div class="feat-module-list">
-              <ul class="feat-module-list-ul grid">
-                <div class="product1">
-                  <li>Productone</li>
-                  <button>place bid</button>
-                </div>
-                <div class="product2">
-                  <li>Producttwo</li>
-                  <button>place bid</button>
-                </div>
-                <div class="product3">
-                  <li>Productthree</li>
-                  <button>place bid</button>
-                </div>
-                ... .. ...
+
+            <div className="feat-module-list">
+              <ul className="feat-module-list-ul grid">
+                {auctionstest.length > 0 ? (
+                  auctionstest.map((auction) => (
+                    <div key={auction.id} className="product-card">
+                      <li>{auction.title}</li>
+                      <p>Status: {auction.status}</p>
+                      <p>Reserve Price: ${auction.reserve_price}</p>
+                      <button>Place Bid</button>
+                    </div>
+                  ))
+                ) : (
+                  <p>No auctions available yet.</p>
+                )}
               </ul>
             </div>
           </div>
