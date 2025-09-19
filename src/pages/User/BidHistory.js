@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 
@@ -17,13 +19,13 @@ function BidHistory() {
                 <li className="menu-box-nav-header">
                   Personal Data
                   <div className="menu-box-nav-link">
-                    <p>Settings</p>
+                    <Link to="/profilepage">Settings</Link>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>Create Auction</p>
+                    <Link to="/auctionpage">Create Auction</Link>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>My Auctions</p>
+                    <Link to="/auctions">My Auctions</Link>
                   </div>
                 </li>
               </div>
@@ -32,13 +34,13 @@ function BidHistory() {
                 <li className="menu-box-nav-header">
                   Payment
                   <div className="menu-box-nav-link">
-                    <p>Purchase history</p>
+                    <Link to="/bidhistory">Purchase history</Link>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>Wishlist</p>
+                    <Link to="/wishlist">Wishlist</Link>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>Notifications</p>
+                    <Link to="/notifications">Notifications</Link>
                   </div>
                 </li>
               </div>
@@ -46,10 +48,10 @@ function BidHistory() {
                 <li className="menu-box-nav-header">
                   Groups
                   <div className="menu-box-nav-link">
-                    <p>Create Group</p>
+                    <Link to="/creategrouppage">Create Group</Link>
                   </div>
                   <div className="menu-box-nav-link">
-                    <p>My Group</p>
+                    <Link to="/groupspage">My Group</Link>
                   </div>
                 </li>
               </div>

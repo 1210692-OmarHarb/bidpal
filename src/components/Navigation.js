@@ -55,7 +55,7 @@ function Navigation({ isLoggedIn }) {
           <nav className="main-nav main-nav-second">
             <ul className="main-nav-list main-nav-list-second">
               <li>
-                <Link className="main-nav-link" to="/sell">
+                <Link className="main-nav-link" to="/auctionpage">
                   Sell
                 </Link>
               </li>
@@ -71,7 +71,7 @@ function Navigation({ isLoggedIn }) {
               </li>
 
               <li>
-                <Link to="/profile" className="icon-btn">
+                <Link to="/profilepage" className="icon-btn">
                   <ion-icon name="person-circle-outline"></ion-icon>
                 </Link>
               </li>
