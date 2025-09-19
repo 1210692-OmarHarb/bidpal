@@ -275,3 +275,111 @@
     margin-bottom: 4.8rem;
   }
 }
+
+/* =============================== */
+/* RESPONSIVE DESIGN  for the HOMEPAGE             */
+/* =============================== */
+/* ========================= */
+/* MEDIA QUERIES (Responsive)*/
+/* ========================= */
+
+/* Tablet: ≤ 1024px */
+@media (max-width: 1024px) {
+  /* Search Bar */
+  .auction-search-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .auction-search-bar input,
+  .auction-search-bar select,
+  .auction-search-bar button {
+    flex: 1 1 45%;
+  }
+
+  /* Hero Carousel */
+  .hero-carousel {
+    flex-direction: column;
+    height: auto;
+    padding: 1.6rem;
+    text-align: center;
+  }
+  .carousel-item {
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+  .carousel-item img {
+    width: 100%;
+    height: 280px;
+  }
+  .carousel-info {
+    width: 100%;
+  }
+
+  /* Featured Auctions */
+  .auction-grid {
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 2rem;
+  }
+
+  /* Auction Tabs */
+  .tabs-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .auction-list {
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  }
+}
+
+/* Mobile: ≤ 768px */
+@media (max-width: 768px) {
+  /* Search Bar */
+  .auction-search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .auction-search-bar input,
+  .auction-search-bar select,
+  .auction-search-bar button {
+    flex: 1 1 100%;
+  }
+
+  /* Hero Carousel */
+  .hero-carousel {
+    padding: 1rem;
+  }
+  .carousel-item img {
+    height: 220px;
+  }
+  .carousel-info h2 {
+    font-size: 1.8rem;
+  }
+  .carousel-info p {
+    font-size: 1.4rem;
+  }
+  .carousel-info button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.4rem;
+  }
+
+  /* Featured Auctions */
+  .featured-auctions h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+  .auction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Auction Tabs */
+  .tabs-nav button {
+    flex: 1 1 30%;
+    font-size: 1.4rem;
+    padding: 0.6rem 1.2rem;
+  }
+  .auction-list {
+    grid-template-columns: 1fr;
+  }
+}

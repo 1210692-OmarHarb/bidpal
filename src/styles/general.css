@@ -148,7 +148,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #e8f5f1;
+  background-color: #000;
 
   /* Because we want header to be sticky later */
   height: 9.6rem;
@@ -608,4 +608,124 @@ input:invalid ~ .error-message {
 
 .devider {
   margin: 64px 0px;
+}
+
+/*                          sdddddd */
+/* src/styles/checkout.css */
+
+/* General page styles */
+.checkout-page {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.checkout-page h1 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 30px;
+  font-size: 2rem;
+}
+
+/* Checkout info section */
+.checkout-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.checkout-info p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.checkout-info strong {
+  color: #169976;
+}
+
+/* PayPal button container */
+#paypal-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Payment status message */
+.payment-status {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #169976;
+}
+
+/* Responsive for mobile */
+@media screen and (max-width: 768px) {
+  .checkout-page {
+    margin: 30px 15px;
+    padding: 15px;
+  }
+
+  .checkout-page h1 {
+    font-size: 1.5rem;
+  }
+
+  .checkout-info p {
+    font-size: 1rem;
+  }
+}
+.checkout-page {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.checkout-container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product-summary {
+  flex: 1 1 300px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.product-summary img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.payment-section {
+  flex: 1 1 300px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.payment-status {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #169976;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkout-container {
+    flex-direction: column;
+    gap: 20px;
+  }
 }

@@ -5,6 +5,9 @@ import Footer from "./components/Footer";
 import Home from "./public/Home";
 import Signin from "./public/Signin";
 import Signup from "./public/Signup";
+import Product from "./public/Product";
+import CheckoutPageWrapper from "./public/CheckoutForm";
+
 import Homepage from "./pages/User/Homepage";
 import AuctionPage from "./pages/User/AuctionPage";
 import ProfilePage from "./pages/User/ProfilePage";
@@ -20,6 +23,9 @@ import ReportsDashboard from "./pages/Admin/ReportsDashboard";
 import ValidateOrg from "./pages/Admin/ValidateOrg";
 import "./styles/general.css";
 import "./styles/queries.css";
+import "./styles/pages.css";
+import "./styles/productPage.css";
+import "./styles/homePage.css";
 
 function App() {
   return (
@@ -40,6 +46,8 @@ function App() {
         <Route path="/groupspage" element={<GroupsPage />} />
         <Route path="/joingroupspage" element={<JoinGroupsPage />} />
         <Route path="/creategrouppage" element={<CreateGroupPage />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/checkout" element={<CheckoutPageWrapper />} />
       </Routes>
     </Router>
   );
