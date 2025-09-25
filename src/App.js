@@ -13,6 +13,8 @@ import AuctionPage from "./pages/User/AuctionPage";
 import ProfilePage from "./pages/User/ProfilePage";
 import Auctions from "./pages/User/Auctions";
 import BidHistory from "./pages/User/BidHistory";
+import Wishlist from "./pages/User/Wishlist";
+import Notification from "./pages/User/Notification";
 
 import GroupsPage from "./pages/User/GroupsPage";
 import JoinGroupsPage from "./pages/User/JoinGroupsPage";
@@ -48,6 +50,8 @@ function App() {
         <Route path="/creategrouppage" element={<CreateGroupPage />} />
         <Route path="/product" element={<Product />} />
         <Route path="/checkout" element={<CheckoutPageWrapper />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
     </Router>
   );

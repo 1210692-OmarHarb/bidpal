@@ -8,6 +8,30 @@ import "../../styles/general.css";
 import "../../styles/pages.css";
 
 function BidHistory() {
+  const history = [
+    {
+      id: 101,
+      title: "Nike Air Jordan",
+      price: "$220",
+      status: "No",
+      date: "2025-09-15",
+    },
+    {
+      id: 102,
+      title: "Vintage Rolex",
+      price: "$5,200",
+      status: "Yes",
+      date: "2025-09-10",
+    },
+    {
+      id: 103,
+      title: "Louis Vuitton Bag",
+      price: "$750",
+      status: "Yes",
+      date: "2025-08-30",
+    },
+  ];
+
   return (
     <>
       <Navigation />
@@ -60,47 +84,34 @@ function BidHistory() {
 
             <div className="section-auctions">
               <h2 className="heading-secondary">Bidding History</h2>
-
               <table className="auction-table">
                 <thead>
                   <tr>
+                    <th>Auction ID</th>
+                    <th>Item</th>
+                    <th>Final Price</th>
+                    <th>Status</th>
                     <th>Date</th>
-                    <th>Description</th>
-                    <th>Bid Price</th>
-                    <th>Marketplace</th>
-                    <th>Ended?</th>
-                    <th>Winner</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>2025-09-10</td>
-                    <td>Nike Air Jordan</td>
-                    <td>$250</td>
-                    <td>Seller123</td>
-                    <td>No</td>
-                    <td>—</td>
-                  </tr>
-                  <tr>
-                    <td>2025-08-20</td>
-                    <td>Louis Vuitton Bag</td>
-                    <td>$700</td>
-                    <td>LuxuryHub</td>
-                    <td>
-                      <span className="ended-yes">Yes</span>
-                    </td>
-                    <td>User_Alice</td>
-                  </tr>
-                  <tr>
-                    <td>2025-07-05</td>
-                    <td>Bearbrick Camo Toy</td>
-                    <td>$400</td>
-                    <td>ToyCollectibles</td>
-                    <td>
-                      <span className="ended-no">No</span>
-                    </td>
-                    <td>User_Bob</td>
-                  </tr>
+                  {history.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.title}</td>
+                      <td>{item.price}</td>
+                      <td>
+                        <span
+                          className={`status-label ${
+                            item.status === "Yes" ? "ended-no" : "ended-yes"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                      </td>
+                      <td>{item.date}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

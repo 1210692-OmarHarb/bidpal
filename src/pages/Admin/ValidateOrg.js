@@ -6,6 +6,31 @@ import "../../styles/general.css";
 import "../../styles/pages.css";
 
 function ValidateOrg() {
+  // Dummy org data (later fetched from DB)
+  const orgs = [
+    {
+      id: "ORG001",
+      name: "SneakerHub",
+      email: "contact@sneakerhub.com",
+      documents: "Business License.pdf",
+      status: "Pending",
+    },
+    {
+      id: "ORG002",
+      name: "LuxuryCars Ltd",
+      email: "sales@luxurycars.com",
+      documents: "Company Registration.pdf",
+      status: "Pending",
+    },
+    {
+      id: "ORG003",
+      name: "VintageElectro",
+      email: "info@vintageelec.com",
+      documents: "ID Verification.pdf",
+      status: "Approved",
+    },
+  ];
+
   return (
     <>
       <Navigation />
@@ -30,47 +55,62 @@ function ValidateOrg() {
               </div>
             </div>
 
-            {/* MAIN SECTION */}
-            <div className="section-auctions">
-              <h2 className="heading-secondary">Validate Organizations</h2>
-              <table className="auction-table">
-                <thead>
-                  <tr>
-                    <th>Org ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Documents</th>
-                    <th>Status</th>
-                    <th>Validate</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>O001</td>
-                    <td>CharityWorld</td>
-                    <td>info@charityworld.org</td>
-                    <td>
-                      <a href="#">View Docs</a>
-                    </td>
-                    <td>Pending</td>
-                    <td>
-                      <button>Approve</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>O002</td>
-                    <td>EcoFund</td>
-                    <td>support@ecofund.com</td>
-                    <td>
-                      <a href="#">View Docs</a>
-                    </td>
-                    <td>Approved</td>
-                    <td>
-                      <button>Revoke</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            {/* MAIN CONTENT */}
+            <div className="validate-org-page">
+              <h2 className="page-title">Validate Organizations</h2>
+              <p className="personal-view-descreption">
+                Review pending organization accounts and approve or reject them.
+              </p>
+
+              <div className="section-auctions">
+                <table className="auction-table">
+                  <thead>
+                    <tr>
+                      <th>Org ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Documents</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orgs.map((org) => (
+                      <tr key={org.id}>
+                        <td>{org.id}</td>
+                        <td>{org.name}</td>
+                        <td>{org.email}</td>
+                        <td>
+                          <a href="#">{org.documents}</a>
+                        </td>
+                        <td>
+                          <span
+                            className={`status ${
+                              org.status === "Approved"
+                                ? "in-progress"
+                                : "upcoming"
+                            }`}
+                          >
+                            {org.status}
+                          </span>
+                        </td>
+                        <td>
+                          {org.status === "Pending" ? (
+                            <>
+                              <div className="btnsorg">
+                                <button className="approve-btn">Approve</button>
+                                <button className="deny-btn">Reject</button>
+                              </div>
+                            </>
+                          ) : (
+                            <span className="status success">✔ Verified</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
