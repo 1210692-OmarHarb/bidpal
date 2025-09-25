@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import "../../styles/general.css";
@@ -8,6 +8,17 @@ import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 
 function AuctionPage() {
+  const [extraFields, setExtraFields] = useState([]);
+
+  const addField = () => {
+    setExtraFields([...extraFields, { name: "", description: "" }]);
+  };
+
+  const handleFieldChange = (index, field, value) => {
+    const newFields = [...extraFields];
+    newFields[index][field] = value;
+    setExtraFields(newFields);
+  };
   return (
     <>
       <Navigation />
@@ -67,24 +78,91 @@ function AuctionPage() {
 
                 <div className="acc-box">
                   <h4 className="acc-info-title">Item Information</h4>
-                  <div className="acc-box-container">
-                    <div className="acc-box-container-item">
-                      <label className="ledit2">Auction Title</label>
-                      <input
-                        className="input11"
-                        type="text"
-                        placeholder="e.g. Nike Air Jordans"
-                      />
-                    </div>
-                    <div className="acc-box-container-item">
-                      <label className="ledit2">Category</label>
-                      <select className="input11">
-                        <option>Fashion</option>
-                        <option>Electronics</option>
-                        <option>Collectibles</option>
-                        <option>Other</option>
-                      </select>
-                    </div>
+                  <div className="acc-box-container-item">
+                    <label className="ledit2">Auction Title</label>
+                    <input
+                      className="input11"
+                      type="text"
+                      placeholder="e.g. Nike Air Jordans"
+                    />
+                  </div>
+                  <div className="acc-box-container-item">
+                    <label className="ledit2">Category</label>
+                    <select className="input11">
+                      <option>Fashion</option>
+                      <option>Electronics</option>
+                      <option>Collectibles</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  {/* Description */}
+                  <div className="acc-box-container-item">
+                    <label className="ledit2">Description</label>
+                    <textarea
+                      className="input11"
+                      rows="4"
+                      placeholder="Enter detailed description..."
+                    />
+                  </div>
+
+                  <div className="acc-box-container-item">
+                    <label className="ledit2">Upload Images</label>
+                    <input className="input11" type="file" multiple />
+                  </div>
+
+                  <hr className="devider" />
+
+                  {/* Additional Item Details */}
+                  <div className="acc-box">
+                    <h4 className="acc-info-title">Additional Item Details</h4>
+                    <p className="personal-view-descreption">
+                      Add custom fields (e.g., Developer, Color, Material, etc.)
+                    </p>
+
+                    {extraFields.map((field, index) => (
+                      <div
+                        key={index}
+                        className="acc-box-container extra-field-box"
+                      >
+                        <input
+                          className="input11"
+                          type="text"
+                          placeholder="Info Name (e.g., Developer)"
+                          value={field.name}
+                          onChange={(e) =>
+                            handleFieldChange(index, "name", e.target.value)
+                          }
+                        />
+                        <input
+                          className="input11"
+                          type="text"
+                          placeholder="Description (e.g., Rogue Factor)"
+                          value={field.description}
+                          onChange={(e) =>
+                            handleFieldChange(
+                              index,
+                              "description",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={addField}
+                      className="btn1"
+                      style={{ marginTop: "1rem" }}
+                    >
+                      + Add Additional Info
+                    </button>
+                  </div>
+                  <hr className="devider" />
+
+                  {/* Features (checkboxes) */}
+                  <div className="acc-box">
+                    <h4 className="acc-info-title">Item Features</h4>
                   </div>
 
                   <div className="acc-box-container">
@@ -106,20 +184,6 @@ function AuctionPage() {
                         placeholder="sneakers, limited edition"
                       />
                     </div>
-                  </div>
-
-                  <div className="acc-box-container-item">
-                    <label className="ledit2">Description</label>
-                    <textarea
-                      className="input11"
-                      rows="4"
-                      placeholder="Enter detailed description..."
-                    />
-                  </div>
-
-                  <div className="acc-box-container-item">
-                    <label className="ledit2">Upload Images</label>
-                    <input className="input11" type="file" multiple />
                   </div>
                 </div>
 
