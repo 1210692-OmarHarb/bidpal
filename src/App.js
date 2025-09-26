@@ -23,6 +23,9 @@ import CreateGroupPage from "./pages/User/CreateGroupPage";
 import ManageAccounts from "./pages/Admin/ManageAccounts";
 import ReportsDashboard from "./pages/Admin/ReportsDashboard";
 import ValidateOrg from "./pages/Admin/ValidateOrg";
+
+import WebSocketTest from "./pages/WebSocketTest";
+
 import "./styles/general.css";
 import "./styles/queries.css";
 import "./styles/pages.css";
@@ -52,6 +55,7 @@ function App() {
         <Route path="/checkout" element={<CheckoutPageWrapper />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/notification" element={<Notification />} />
+        <Route path="/wstest" element={<WebSocketTest />} />
       </Routes>
     </Router>
   );
