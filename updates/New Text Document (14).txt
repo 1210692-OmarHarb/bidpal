@@ -1,0 +1,122 @@
+import React from "react";
+
+const NavigationMenu = ({ error, currentPage, highlight }) => {
+  return (
+    <>
+      {error === null && (
+        <>
+          <li className={currentPage === "signup.php" ? "active" : ""}>
+            User Information Form
+          </li>
+          <li className={currentPage === "Eacc.php" ? "active" : ""}>
+            E-Account Creation
+          </li>
+          <li
+            className={
+              currentPage === "confirm.php" || currentPage === "valid.php"
+                ? "active"
+                : ""
+            }
+          >
+            Confirmation and Submission
+          </li>
+        </>
+      )}
+
+      {error === "Manager" && (
+        <>
+          <li className={currentPage === "addproject.php" ? "active" : ""}>
+            <a href="addproject.php">Add Project</a>
+          </li>
+          <li
+            className={
+              currentPage === "allocate.php" ||
+              currentPage === "allocateform.php"
+                ? "active"
+                : ""
+            }
+          >
+            <a href="allocate.php">Allocate Team Leader</a>
+          </li>
+          <li
+            className={
+              currentPage === "taskSearch.php" ||
+              currentPage === "taskDetails.php"
+                ? "active"
+                : ""
+            }
+          >
+            <a href="taskSearch.php">Task Search Functionality Description</a>
+          </li>
+        </>
+      )}
+
+      {error === "Project Leader" && (
+        <>
+          <li className={currentPage === "addtask.php" ? "active" : ""}>
+            <a href="addtask.php">Add Task</a>
+          </li>
+          <li
+            className={
+              currentPage === "assignments.php" || currentPage === "assign.php"
+                ? "active"
+                : ""
+            }
+          >
+            <a href="assignments.php">Assign Team Members to Tasks</a>
+          </li>
+          <li
+            className={
+              currentPage === "taskSearch.php" ||
+              currentPage === "taskDetails.php"
+                ? "active"
+                : ""
+            }
+          >
+            <a href="taskSearch.php">Task Search Functionality Description</a>
+          </li>
+        </>
+      )}
+
+      {error === "Team Member" && (
+        <>
+          <li
+            className={
+              currentPage === "asstwo.php" || currentPage === "contask.php"
+                ? "active"
+                : ""
+            }
+          >
+            <a
+              href="asstwo.php"
+              className={highlight === "not empty" ? "highlight1" : ""}
+            >
+              Accept Task Assignments Feature
+            </a>
+          </li>
+          <li
+            className={
+              currentPage === "search.php" || currentPage === "update_task.php"
+                ? "active"
+                : ""
+            }
+          >
+            <a href="search.php">Search and Update Task Progress</a>
+          </li>
+          <li
+            className={
+              currentPage === "taskSearch.php" ||
+              currentPage === "taskDetails.php"
+                ? "active"
+                : ""
+            }
+          >
+            <a href="taskSearch.php">Task Search Functionality Description</a>
+          </li>
+        </>
+      )}
+    </>
+  );
+};
+
+export default NavigationMenu;

@@ -1,0 +1,84 @@
+import express from "express";
+import pool from "../db.js";
+
+const router = express.Router();
+
+// POST create auction
+router.post("/create", async (req, res) => {
+  try {
+    const {
+      title,
+      categoryID,
+      description,
+      images,
+      condition,
+      tags,
+      reservePrice,
+      startingBid,
+      startDate,
+      endDate,
+      autoExtend,
+      warranty,
+      shippingOption,
+      shippingCost,
+      returnPolicy,
+      sellerID,
+      extraFields, // custom details (array of {name, description})
+    } = req.body;
+
+    // 1. Insert into Item
+    const [itemResult] = await pool.query(
+      `INSERT INTO Item (categoryID, name, description, images, \`condition\`, tags, warranty)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        categoryID,
+        title,
+        description,
+        JSON.stringify(images), // store as JSON array
+        condition,
+        tags,
+        warranty,
+      ]
+    );
+
+    const itemID = itemResult.insertId;
+
+    // 2. Insert into Auction
+    const [auctionResult] = await pool.query(
+      `INSERT INTO Auction (itemID, sellerID, reservePrice, startingBid, startDate, endDate, autoExtend, shippingOption, shippingCost, returnPolicy)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        itemID,
+        sellerID,
+        reservePrice,
+        startingBid,
+        startDate,
+        endDate,
+        autoExtend ? 1 : 0,
+        shippingOption,
+        shippingCost,
+        returnPolicy,
+      ]
+    );
+
+    const auctionID = auctionResult.insertId;
+
+    // 3. Insert additional fields (if any)
+    if (extraFields && extraFields.length > 0) {
+      for (const field of extraFields) {
+        await pool.query(
+          `INSERT INTO ItemExtraDetails (itemID, fieldName, fieldValue)
+           VALUES (?, ?, ?)`,
+          [itemID, field.name, field.description]
+        );
+      }
+    }
+
+    res.json({ success: true, auctionID });
+  } catch (err) {
+    console.error("Error creating auction:", err);
+    res.status(500).json({ error: "Failed to create auction" });
+  }
+});
+
+export default router;

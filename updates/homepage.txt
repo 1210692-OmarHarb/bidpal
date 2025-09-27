@@ -1,0 +1,208 @@
+function Homepage() {
+  const [activeTab, setActiveTab] = useState("live");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const carouselItems = [
+    {
+      img: "/img/auction1.png",
+      title: "Nike Air Jordan Rare Edition",
+      desc: "Exclusive drop — limited quantity.",
+    },
+    {
+      img: "/img/auction2.png",
+      title: "Louis Vuitton Collector’s Bag",
+      desc: "Luxury piece for premium collectors.",
+    },
+    {
+      img: "/img/auction3.png",
+      title: "Vintage Rolex Watch",
+      desc: "Timeless design, exclusive drop.",
+    },
+    {
+      img: "/img/auction4.png",
+      title: "Rare Comic Book",
+      desc: "Marvel #1, iconic collectible.",
+    },
+    {
+      img: "/img/auction5.png",
+      title: "MacBook Pro 2025",
+      desc: "Powerful performance for creators.",
+    },
+  ];
+
+  // Auto-change every 3s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [carouselItems.length]);
+
+  return (
+    <>
+      <Navigation />
+      <main className="homepage">
+        <div className="auction-search-bar">
+          <input type="text" placeholder="Search auctions..." />
+          <select>
+            <option>All Categories</option>
+            <option>Fashion</option>
+            <option>Electronics</option>
+            <option>Collectibles</option>
+          </select>
+          <select>
+            <option>Status</option>
+            <option>Live</option>
+            <option>Upcoming</option>
+            <option>Ended</option>
+          </select>
+          <button className="search-btn">Search</button>
+        </div>
+
+        <section className="hero-carousel">
+          <div className="carousel-item">
+            <img
+              src={carouselItems[currentIndex].img}
+              alt={carouselItems[currentIndex].title}
+              className="carousel-item imgroot505"
+            />
+            <div className="carousel-info">
+              <h2>{carouselItems[currentIndex].title}</h2>
+              <p>{carouselItems[currentIndex].desc}</p>
+              <button>Place Bid</button>
+              <button>Add to Watchlist</button>
+            </div>
+          </div>
+        </section>
+
+        <section className="featured-auctions">
+          <h2>Discover New Featured Auctions</h2>
+          <div className="auction-grid">
+            <div className="auction-card">
+              <img src="/img/auction2.png" alt="Auction" />
+              <h3>Louis Vuitton Bag</h3>
+              <p>Starting Price: $500</p>
+            </div>
+            <div className="auction-card">
+              <img src="/img/auction3.png" alt="Auction" />
+              <h3>Vintage Rolex</h3>
+              <p>Starting Price: $5,000</p>
+            </div>
+            <div className="auction-card">
+              <img src="/img/auction3.png" alt="Auction" />
+              <h3>Vintage Rolex</h3>
+              <p>Starting Price: $5,000</p>
+            </div>
+            <div className="auction-card">
+              <img src="/img/auction3.png" alt="Auction" />
+              <h3>Vintage Rolex</h3>
+              <p>Starting Price: $5,000</p>
+            </div>
+            <div className="auction-card">
+              <img src="/img/auction3.png" alt="Auction" />
+              <h3>Vintage Rolex</h3>
+              <p>Starting Price: $5,000</p>
+            </div>
+          </div>
+        </section>
+
+        {/* === Auction Categories (Tabs) === */}
+        <section className="auction-tabs">
+          <nav className="tabs-nav">
+            <button
+              className={activeTab === "live" ? "active" : ""}
+              onClick={() => setActiveTab("live")}
+            >
+              Live
+            </button>
+            <button
+              className={activeTab === "upcoming" ? "active" : ""}
+              onClick={() => setActiveTab("upcoming")}
+            >
+              Upcoming
+            </button>
+            <button
+              className={activeTab === "ending" ? "active" : ""}
+              onClick={() => setActiveTab("ending")}
+            >
+              Ending Soon
+            </button>
+          </nav>
+
+          <div className="auction-list">
+            {activeTab === "live" && (
+              <div className="auction-grid">
+                <div className="auction-card">
+                  <img src="/img/auction4.png" alt="Auction" class="" />
+                  <h3>Rare Comic Book</h3>
+                  <p>Highest Bid: $300</p>
+                  <p>Ends in: 2h 30m</p>
+                </div>
+                <div className="auction-card">
+                  <img src="/img/auction4.png" alt="Auction" class="" />
+                  <h3>Rare Comic Book</h3>
+                  <p>Highest Bid: $300</p>
+                  <p>Ends in: 2h 30m</p>
+                </div>
+                <div className="auction-card">
+                  <img src="/img/auction4.png" alt="Auction" class="" />
+                  <h3>Rare Comic Book</h3>
+                  <p>Highest Bid: $300</p>
+                  <p>Ends in: 2h 30m</p>
+                </div>
+              </div>
+            )}
+            {activeTab === "upcoming" && (
+              <div className="auction-grid">
+                <div className="auction-card">
+                  <img src="/img/auction5.png" alt="Auction" />
+                  <h3>MacBook Pro</h3>
+                  <p>Reserve Price: $1,200</p>
+                  <p>Starts: Tomorrow</p>
+                </div>
+                <div className="auction-card">
+                  <img src="/img/auction5.png" alt="Auction" />
+                  <h3>MacBook Pro</h3>
+                  <p>Reserve Price: $1,200</p>
+                  <p>Starts: Tomorrow</p>
+                </div>
+                <div className="auction-card">
+                  <img src="/img/auction5.png" alt="Auction" />
+                  <h3>MacBook Pro</h3>
+                  <p>Reserve Price: $1,200</p>
+                  <p>Starts: Tomorrow</p>
+                </div>
+              </div>
+            )}
+            {activeTab === "ending" && (
+              <div className="auction-grid">
+                <div className="auction-card">
+                  <img src="/img/auction1.png" alt="Auction" />
+                  <h3>Luxury Car Auction</h3>
+                  <p>Highest Bid: $50,000</p>
+                  <p>Ending Soon</p>
+                </div>
+
+                <div className="auction-card">
+                  <img src="/img/auction1.png" alt="Auction" />
+                  <h3>Luxury Car Auction</h3>
+                  <p>Highest Bid: $50,000</p>
+                  <p>Ending Soon</p>
+                </div>
+                <div className="auction-card">
+                  <img src="/img/auction1.png" alt="Auction" />
+                  <h3>Luxury Car Auction</h3>
+                  <p>Highest Bid: $50,000</p>
+                  <p>Ending Soon</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+export default Homepage;

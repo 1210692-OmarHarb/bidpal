@@ -1,0 +1,269 @@
+/* =========================== ===============================*/
+/* Homepage Base Layout */
+/* =========================== =======================================*/
+.homepage {
+  color: #000;
+
+  margin-top: 6.2rem;
+  padding: 0 3.6rem;
+  font-family: Inter, sans-serif;
+}
+
+/* =========================== */
+/* Search Bar + Filters */
+/* =========================== */
+.auction-search-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.auction-search-bar input,
+.auction-search-bar select {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #202024;
+  color: #fff;
+  font-size: 1.4rem;
+}
+
+.auction-search-bar input::placeholder {
+  color: #aaa;
+}
+
+.search-btn {
+  padding: 0.8rem 1.6rem;
+  background: #169976;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  background: #148a6a;
+}
+
+/* =========================== */
+/* Hero Carousel Section */
+/* =========================== */
+
+/* HERO CAROUSEL */
+.hero-carousel {
+  max-width: 120rem;
+  margin: 2rem auto;
+  padding: 2.4rem;
+  border-radius: 12px;
+  background: #087f5b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  height: 400px; /* FIXED HEIGHT */
+}
+
+.carousel-item {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.carousel-item img {
+  width: 50%;
+  height: 100%; /* FIXED HEIGHT */
+  object-fit: cover; /* crop/stretch nicely */
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.carousel-info {
+  flex: 1;
+}
+
+.carousel-info h2 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+
+.carousel-info p {
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  color: #e6fcf5;
+}
+
+.carousel-info button {
+  margin-right: 1rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.4rem;
+  transition: background 0.3s;
+}
+
+.carousel-info button:first-child {
+  background: #fff;
+  color: #087f5b;
+}
+
+.carousel-info button:first-child:hover {
+  background: #f1f1f1;
+}
+
+.carousel-info button:last-child {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+.carousel-info button:last-child:hover {
+  background: #fff;
+  color: #087f5b;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================== */
+/* Featured Auctions Section */
+/* =========================== */
+.featured-auctions {
+  margin-bottom: 4rem;
+}
+
+.featured-auctions h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+.auction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  gap: 2.4rem;
+}
+
+.auction-card {
+  background: #000;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+}
+
+.auction-card:hover {
+  transform: translateY(-5px);
+}
+
+/* FIXED: Consistent image sizes for all auction cards */
+.auction-card img {
+  width: 100%;
+  height: 200px; /* Fixed consistent height */
+  border-radius: 8px;
+  object-fit: cover; /* Ensures images maintain aspect ratio while filling the space */
+  margin-bottom: 1rem;
+}
+
+.auction-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.auction-card p {
+  font-size: 1.2rem;
+  color: #bbb;
+  margin-bottom: 1rem;
+}
+
+.auction-card button {
+  padding: 0.6rem 1.2rem;
+  background: #169976;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.auction-card button:hover {
+  background: #148a6a;
+}
+
+/* =========================== */
+/* Auction Tabs Section */
+/* =========================== */
+.auction-tabs {
+  margin: 4rem auto;
+  height: 400px;
+  max-width: 120rem;
+}
+
+.tabs-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.6rem;
+  margin-bottom: 2rem;
+}
+
+.tabs-nav button {
+  padding: 0.8rem 1.6rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #f1f1f1;
+  color: #333;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.tabs-nav button.active {
+  background-color: #087f5b;
+  color: #fff;
+}
+
+.tabs-nav button:hover {
+  background-color: #ddd;
+}
+
+.auction-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  gap: 2.4rem;
+}
+
+/* FIXED: Consistent styling for auction list cards */
+.auction-list .auction-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* FIXED: Consistent image sizes for auction list cards */
+.auction-list .auction-card img {
+  width: 100%;
+  height: 350px; /* Fixed consistent height */
+  border-radius: 8px;
+  object-fit: cover; /* Ensures images maintain aspect ratio while filling the space */
+  margin-bottom: 1rem;
+}

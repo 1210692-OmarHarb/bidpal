@@ -1,22 +1,15 @@
-const WebSocket = require("ws");
+import express from "express";
+import cors from "cors";
+import auctionsRoutes from "./routes/auctionsRoutes.js";
 
-const wss = new WebSocket.Server({ port: 8080 });
+const app = express();
 
-wss.on("connection", (ws) => {
-  console.log("New client connected ✅");
+app.use(cors());
+app.use(express.json());
 
-  ws.send("Welcome to BidPal WebSocket test!");
+// Routes
+app.use("/api/auctions", auctionsRoutes);
 
-  ws.on("message", (message) => {
-    console.log("Received:", message.toString());
-
-    // Echo back
-    ws.send(`Server says: ${message}`);
-  });
-
-  ws.on("close", () => {
-    console.log("Client disconnected ❌");
-  });
+app.listen(5000, () => {
+  console.log("Server running on http://localhost:5000");
 });
-
-console.log("WebSocket server running on ws://localhost:8080");
