@@ -23,39 +23,27 @@ function Homepage() {
 
   // Fetch all homepage data
   useEffect(() => {
-    // Fetch categories
     axios
       .get("http://localhost:5000/api/homepage/categories")
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.error("Error fetching categories:", err));
+      .then((res) => setCategories(res.data));
 
-    // Fetch statuses
     axios
       .get("http://localhost:5000/api/homepage/statuses")
-      .then((res) => setStatuses(res.data))
-      .catch((err) => console.error("Error fetching statuses:", err));
+      .then((res) => setStatuses(res.data));
 
-    // Fetch carousel items
     axios
       .get("http://localhost:5000/api/homepage/carousel")
-      .then((res) => setCarouselItems(res.data))
-      .catch((err) => console.error("Error fetching carousel:", err));
+      .then((res) => setCarouselItems(res.data));
 
-    // Fetch featured auctions
     axios
       .get("http://localhost:5000/api/homepage/featured")
-      .then((res) => setFeaturedAuctions(res.data))
-      .catch((err) => console.error("Error fetching featured:", err));
+      .then((res) => setFeaturedAuctions(res.data));
 
-    // Fetch tab auctions - Fixed endpoint URLs
     ["live", "upcoming", "ending"].forEach((status) => {
       axios
-        .get(`http://localhost:5000/api/homepage/tabs/${status}`)
+        .get(`http://localhost:5000/api/homepage/auctions/${status}`)
         .then((res) =>
           setTabAuctions((prev) => ({ ...prev, [status]: res.data }))
-        )
-        .catch((err) =>
-          console.error(`Error fetching ${status} auctions:`, err)
         );
     });
   }, []);
@@ -69,7 +57,6 @@ function Homepage() {
       return () => clearInterval(interval);
     }
   }, [carouselItems]);
-
   // Featured auctions slider controls
   const nextFeatured = () => {
     setFeaturedSlideIndex((prev) =>
@@ -82,7 +69,6 @@ function Homepage() {
       prev - 3 < 0 ? Math.max(0, featuredAuctions.length - 3) : prev - 3
     );
   };
-
   const nextTab = () => {
     const currentAuctions = tabAuctions[activeTab];
     setTabSlideIndex((prev) =>
@@ -124,7 +110,7 @@ function Homepage() {
           <section className="hero-carousel">
             <div className="carousel-item">
               <img
-                src={carouselItems[currentIndex].images[0]}
+                src={JSON.parse(carouselItems[currentIndex].images)[0]}
                 alt={carouselItems[currentIndex].title}
                 className="carousel-item-img"
               />
@@ -219,8 +205,8 @@ function Homepage() {
               }}
             >
               {tabAuctions[activeTab].map((a) => (
-                <div key={a.auctionID} className="auction-card ">
-                  <img src={a.images[0]} alt={a.title} />
+                <div key={a.auctionID} className="auction-card tab-card">
+                  <img src={JSON.parse(a.images)[0]} alt={a.title} />
                   <h3>{a.title}</h3>
                   <p>Highest Bid: ${a.currentHighestBid}</p>
                   <p>Ends: {a.endDate}</p>
