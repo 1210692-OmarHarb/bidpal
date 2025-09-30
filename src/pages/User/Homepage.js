@@ -133,10 +133,29 @@ function Homepage() {
                 <p>{carouselItems[currentIndex].description}</p>
                 <button>Place Bid</button>
                 <button>Add to Watchlist</button>
+
+               
               </div>
             </div>
+
+
+ 
           </section>
+
+          
         )}
+
+      {carouselItems.length > 0 && (
+           <div>
+               <img
+                src={carouselItems[currentIndex].images[0]}
+                alt={carouselItems[currentIndex].title}
+                width="50px" height="50px"
+                className="carousel-item-img"
+              />
+            </div>
+
+    )}
 
         <section className="featured-auctions">
           <div className="section-header">
