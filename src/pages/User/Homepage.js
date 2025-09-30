@@ -18,8 +18,21 @@ function Homepage() {
 
   const [activeTab, setActiveTab] = useState("live");
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const [featuredSlideIndex, setFeaturedSlideIndex] = useState(0);
   const [tabSlideIndex, setTabSlideIndex] = useState(0);
+
+  const [imageProgress, setImageProgress] = useState(0);
+  // Create flat array of all images from all carousel items
+  const allImages = carouselItems.flatMap((item, itemIdx) =>
+    item.images.map((img, imgIdx) => ({
+      src: img,
+      auctionIndex: itemIdx,
+      imageIndex: imgIdx,
+      title: item.title,
+      description: item.description,
+    }))
+  );
 
   // Fetch all homepage data
   useEffect(() => {
@@ -60,15 +73,31 @@ function Homepage() {
     });
   }, []);
 
-  // Auto carousel
   useEffect(() => {
-    if (carouselItems.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
-      }, 3000);
-      return () => clearInterval(interval);
+    if (allImages.length > 0) {
+      const DURATION = 5000;
+      const UPDATE_INTERVAL = 100;
+      const INCREMENT = 100 / (DURATION / UPDATE_INTERVAL);
+
+      const progressInterval = setInterval(() => {
+        setImageProgress((prev) => {
+          const newProgress = prev + INCREMENT;
+
+          if (newProgress >= 100) {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % allImages.length);
+            return 0;
+          }
+          return newProgress;
+        });
+      }, UPDATE_INTERVAL);
+
+      return () => clearInterval(progressInterval);
     }
-  }, [carouselItems]);
+  }, [allImages.length]);
+  const handleThumbnailClick = (index) => {
+    setCurrentIndex(index);
+    setImageProgress(0);
+  };
 
   // Featured auctions slider controls
   const nextFeatured = () => {
@@ -120,42 +149,65 @@ function Homepage() {
         </div>
 
         {/* === Hero carousel === */}
-        {carouselItems.length > 0 && (
-          <section className="hero-carousel">
-            <div className="carousel-item">
-              <img
-                src={carouselItems[currentIndex].images[0]}
-                alt={carouselItems[currentIndex].title}
-                className="carousel-item-img"
-              />
-              <div className="carousel-info">
-                <h2>{carouselItems[currentIndex].title}</h2>
-                <p>{carouselItems[currentIndex].description}</p>
-                <button>Place Bid</button>
-                <button>Add to Watchlist</button>
 
-               
+        <div className="groupdiv101">
+          {allImages.length > 0 && (
+            <section className="hero-carousel">
+              <div className="carousel-item">
+                <img
+                  src={allImages[currentIndex].src}
+                  alt={allImages[currentIndex].title}
+                  className="carousel-item-img"
+                />
+                <div className="carousel-info">
+                  <h2>{allImages[currentIndex].title}</h2>
+                  <p>{allImages[currentIndex].description}</p>
+                  <button>Place Bid</button>
+                  <button>Add to Watchlist</button>
+                </div>
               </div>
+            </section>
+          )}
+
+          {allImages.length > 0 && (
+            <div className="nextImageSlider">
+              {allImages.map((imgData, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => handleThumbnailClick(idx)}
+                  style={{ cursor: "pointer", position: "relative" }}
+                >
+                  <img
+                    src={imgData.src}
+                    alt={`${imgData.title} ${idx + 1}`}
+                    className="nextImage101"
+                    style={{
+                      opacity: currentIndex === idx ? 1 : 0.6,
+                      border:
+                        currentIndex === idx
+                          ? "3px solid #007bff"
+                          : "2px solid transparent",
+                      transition: "all 0.3s ease",
+                    }}
+                  />
+                  {currentIndex === idx && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        height: "4px",
+                        width: `${imageProgress}%`,
+                        backgroundColor: "#007bff",
+                        transition: "width 0.1s linear",
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-
-
- 
-          </section>
-
-          
-        )}
-
-      {carouselItems.length > 0 && (
-           <div>
-               <img
-                src={carouselItems[currentIndex].images[0]}
-                alt={carouselItems[currentIndex].title}
-                width="50px" height="50px"
-                className="carousel-item-img"
-              />
-            </div>
-
-    )}
+          )}
+        </div>
 
         <section className="featured-auctions">
           <div className="section-header">

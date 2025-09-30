@@ -13,7 +13,7 @@ function AuctionPage() {
   const [categoryID, setCategoryID] = useState(1); // Default to Fashion
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
-  const [condition, setCondition] = useState("New");
+  const [condition, setCondition] = useState("");
   const [tags, setTags] = useState("");
   const [reservePrice, setReservePrice] = useState("");
   const [startingBid, setStartingBid] = useState("");
@@ -354,6 +354,9 @@ function AuctionPage() {
                         onChange={(e) => setCondition(e.target.value)}
                         required
                       >
+                        <option value="" disabled>
+                          -- Select Condition --
+                        </option>
                         <option value="New">New</option>
                         <option value="Like New">Like New</option>
                         <option value="Used">Used</option>

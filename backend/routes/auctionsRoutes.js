@@ -62,10 +62,11 @@ router.post("/create", async (req, res) => {
     console.log("Inserting into auction table...");
     const [auctionResult] = await connection.query(
       `INSERT INTO auction (
-        userID, itemID, title, description, reservePrice, startingPrice, 
-        status, startDate, endDate, autoExtend, currentHighestBid, 
-        shippingOption, shippingCost, returnPolicy, warrantyInfo
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  userID, itemID, title, description, reservePrice, startingPrice, 
+  status, startDate, endDate, autoExtend, currentHighestBid, 
+  shippingOption, shippingCost, returnPolicy, warrantyInfo, itemCondition
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`,
       [
         sellerID || 1,
         itemID,
@@ -82,6 +83,7 @@ router.post("/create", async (req, res) => {
         shippingCost ? parseFloat(shippingCost) : 0.0,
         returnPolicy || "none",
         warranty || null,
+        condition, // <-- added here
       ]
     );
 

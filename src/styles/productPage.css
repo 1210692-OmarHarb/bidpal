@@ -317,7 +317,6 @@
 .watchlist-btn.active {
   border-color: #169976;
   background: rgba(22, 153, 118, 0.2);
-  color: #169976;
 }
 
 /* =========================== */
@@ -375,12 +374,13 @@
   font-size: 1.4rem;
   font-weight: 600;
   transition: all 0.3s;
+  border-bottom-width: 5px;
 }
 
 .tab-btn.active,
 .tab-btn:hover {
-  color: #169976;
   border-bottom-color: #169976;
+  border-bottom-width: 5px;
 }
 
 .tab-content {

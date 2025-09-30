@@ -37,7 +37,6 @@ function Product() {
   // Product data
   const product = {
     title: "Hell is Us - Limited Collector's Edition",
-    subtitle: "Exclusive Gaming Collectible",
     images: [
       "/img/hellisus1.jpg",
       "/img/hellisus2.jpg",
@@ -164,8 +163,9 @@ This limited collector's edition includes:
       <div className="product-page">
         {/* Breadcrumb */}
         <nav className="breadcrumb">
-          <span>Home</span> &gt; <span>Gaming</span> &gt;{" "}
-          <span>Collectibles</span> &gt; <span>{product.title}</span>
+          <span>Home</span> &gt;
+          <span>category</span> &gt; <span>descreption(of category)</span> &gt;{" "}
+          <span>{product.title}</span>
         </nav>
 
         <div className="product-container">
@@ -200,7 +200,6 @@ This limited collector's edition includes:
           <div className="product-info">
             <div className="product-header">
               <h1>{product.title}</h1>
-              <p className="subtitle">{product.subtitle}</p>
               <div className="product-meta">
                 <span className="condition">{product.condition}</span>
                 <div className="ratings">
@@ -218,12 +217,6 @@ This limited collector's edition includes:
                   <span className="label">Current Bid</span>
                   <span className="amount">
                     ${product.currentBid.toFixed(2)}
-                  </span>
-                </div>
-                <div className="buy-now-price">
-                  <span className="label">Buy It Now</span>
-                  <span className="amount">
-                    ${product.buyNowPrice.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -264,9 +257,6 @@ This limited collector's edition includes:
                   Place Bid
                 </button>
               </div>
-              <button onClick={handleBuyNow} className="buy-now-btn">
-                Buy It Now - ${product.buyNowPrice.toFixed(2)}
-              </button>
             </div>
 
             {/* Action Buttons */}
@@ -306,7 +296,7 @@ This limited collector's edition includes:
         {/* Tabs Section */}
         <div className="product-tabs">
           <div className="tab-buttons">
-            <button className="tab-btn active">Description</button>
+            <button className="tab-btn">Description</button>
             <button
               className="tab-btn"
               onClick={() => setShowBidHistory(!showBidHistory)}

@@ -9,6 +9,27 @@
   font-family: Inter, sans-serif;
 }
 
+.groupdiv101 {
+  display: flex;
+}
+
+.nextImageSlider {
+  margin: 2rem auto;
+  padding: 2.4rem;
+  display: block;
+  width: 175px;
+  gap: 3rem;
+}
+
+.nextImage101 {
+  width: 175px;
+  height: 100px;
+
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
 /* =========================== */
 /* Search Bar + Filters */
 /* =========================== */
@@ -62,6 +83,7 @@
   overflow: hidden;
   color: #fff;
   height: 500px;
+  width: 100%;
 }
 
 .carousel-item {
