@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import "../styles/general.css";
 import "../styles/queries.css";
@@ -23,91 +23,46 @@ import {
 
 function Product() {
   const navigate = useNavigate();
+  const { auctionID } = useParams();
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [bidAmount, setBidAmount] = useState("");
   const [timeLeft, setTimeLeft] = useState({
-    hours: 23,
-    minutes: 45,
-    seconds: 30,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
   const [isWatchlisted, setIsWatchlisted] = useState(false);
   const [showBidHistory, setShowBidHistory] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Product data
-  const product = {
-    title: "Hell is Us - Limited Collector's Edition",
-    images: [
-      "/img/hellisus1.jpg",
-      "/img/hellisus2.jpg",
-      "/img/hellisus3.jpg",
-      "/img/hellisus4.jpg",
-      "/img/hellisus5.jpg",
-    ],
-    currentBid: 245.0,
-    startingPrice: 99.99,
-    buyNowPrice: 399.99,
-    bidIncrement: 5.0,
-    totalBids: 18,
-    watchers: 47,
-    condition: "Brand New",
-    seller: {
-      name: "GameCollector_Pro",
-      rating: 4.8,
-      reviews: 342,
-      memberSince: "2019",
-    },
-    description: `A year is the closest we get to hell on earth, it's because Earth harbours the worst of demons: humankind. In an isolated country ravaged by infighting, discover the secrets of your past and deal with the repercussions of a mysterious calamity.
+  // Product data from API
+  const [product, setProduct] = useState(null);
+  const [bidHistory, setBidHistory] = useState([]);
+  const [relatedAuctions, setRelatedAuctions] = useState([]);
 
-This limited collector's edition includes:
-• Premium steel book case
-• Exclusive art book (120 pages)
-• Soundtrack vinyl record
-• Collectible figurine
-• Digital wallpapers and concept art
-• Season pass for all DLC content`,
-    features: ["Cloud Saves", "Controller Support", "Single Player"],
-    category: "Gaming",
-    platform: "PC/Console",
-    releaseDate: "Q2 2024",
-    publisher: "Nacon",
-    developer: "Rogue Factor",
+  // Fetch product data on mount
+  useEffect(() => {
+    fetchProductData();
+  }, [auctionID]);
+
+  const fetchProductData = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/product/${auctionID}`);
+      const data = await res.json();
+
+      if (data.success) {
+        setProduct(data.data);
+        setBidHistory(data.data.bidHistory);
+        setRelatedAuctions(data.data.relatedAuctions);
+        setTimeLeft(data.data.timeLeft);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      setLoading(false);
+    }
   };
-
-  const bidHistory = [
-    { bidder: "User***23", amount: 245.0, time: "2 minutes ago" },
-    { bidder: "Collect***89", amount: 240.0, time: "5 minutes ago" },
-    { bidder: "Game***45", amount: 235.0, time: "12 minutes ago" },
-    { bidder: "Retro***67", amount: 230.0, time: "18 minutes ago" },
-    { bidder: "User***23", amount: 225.0, time: "25 minutes ago" },
-  ];
-
-  const relatedAuctions = [
-    {
-      img: "/img/auction1.png",
-      title: "Vintage Gaming Console",
-      price: "$180",
-      time: "2d 4h",
-    },
-    {
-      img: "/img/auction2.png",
-      title: "Rare Collectible Figure",
-      price: "$95",
-      time: "1d 12h",
-    },
-    {
-      img: "/img/auction3.png",
-      title: "Limited Edition Art Book",
-      price: "$45",
-      time: "3h 20m",
-    },
-    {
-      img: "/img/auction4.png",
-      title: "Gaming Merchandise Bundle",
-      price: "$75",
-      time: "5d 8h",
-    },
-  ];
 
   // Countdown timer
   useEffect(() => {
@@ -125,51 +80,91 @@ This limited collector's edition includes:
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [product]);
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? product.images.length - 1 : prev - 1
-    );
-  };
-
-  const handleBid = () => {
-    const bid = parseFloat(bidAmount);
-    if (
-      bid > product.currentBid &&
-      bid >= product.currentBid + product.bidIncrement
-    ) {
-      alert(`Bid placed successfully for $${bid}!`);
-      setBidAmount("");
-    } else {
-      alert(`Minimum bid is $${product.currentBid + product.bidIncrement}`);
+    if (product) {
+      setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
     }
   };
 
-  const handleBuyNow = () => {
-    // Redirect to Checkout page with product info
-    navigate("/checkout", {
-      state: { productTitle: product.title, amount: product.buyNowPrice },
-    });
+  const prevImage = () => {
+    if (product) {
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? product.images.length - 1 : prev - 1
+      );
+    }
   };
+
+  const handleBid = async () => {
+    const bid = parseFloat(bidAmount);
+    const minBid = product.currentBid + product.bidIncrement;
+
+    if (bid < minBid) {
+      alert(`Minimum bid is $${minBid.toFixed(2)}`);
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/product/${auctionID}/bid`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userID: 1, // TODO: Get from auth context
+            bidAmount: bid,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Bid placed successfully!");
+        fetchProductData(); // Refresh data
+        setBidAmount("");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Error placing bid:", error);
+      alert("Failed to place bid");
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Navigation />
+        <div style={{ padding: "50px", textAlign: "center" }}>Loading...</div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!product) {
+    return (
+      <>
+        <Navigation />
+        <div style={{ padding: "50px", textAlign: "center" }}>
+          Product not found
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
       <Navigation />
       <div className="product-page">
-        {/* Breadcrumb */}
         <nav className="breadcrumb">
           <span>Home</span> &gt;
-          <span>category</span> &gt; <span>descreption(of category)</span> &gt;{" "}
-          <span>{product.title}</span>
+          <span>{product.category}</span> &gt; <span>{product.title}</span>
         </nav>
 
         <div className="product-container">
-          {/* Image Gallery */}
           <div className="image-gallery">
             <div className="main-image">
               <img
@@ -196,7 +191,6 @@ This limited collector's edition includes:
             </div>
           </div>
 
-          {/* Product Info */}
           <div className="product-info">
             <div className="product-header">
               <h1>{product.title}</h1>
@@ -210,7 +204,6 @@ This limited collector's edition includes:
               </div>
             </div>
 
-            {/* Auction Details */}
             <div className="auction-details">
               <div className="price-section">
                 <div className="current-bid">
@@ -240,7 +233,6 @@ This limited collector's edition includes:
               </div>
             </div>
 
-            {/* Bidding Section */}
             <div className="bidding-section">
               <div className="bid-input-group">
                 <input
@@ -259,7 +251,6 @@ This limited collector's edition includes:
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="action-buttons">
               <button
                 className={`watchlist-btn ${isWatchlisted ? "active" : ""}`}
@@ -274,7 +265,6 @@ This limited collector's edition includes:
               </button>
             </div>
 
-            {/* Seller Info */}
             <div className="seller-info">
               <h3>Seller Information</h3>
               <div className="seller-details">
@@ -293,14 +283,15 @@ This limited collector's edition includes:
           </div>
         </div>
 
-        {/* Tabs Section */}
         <div className="product-tabs">
           <div className="tab-buttons">
-            <button className="tab-btn">Description</button>
             <button
               className="tab-btn"
-              onClick={() => setShowBidHistory(!showBidHistory)}
+              onClick={() => setShowBidHistory(false)}
             >
+              Description
+            </button>
+            <button className="tab-btn" onClick={() => setShowBidHistory(true)}>
               Bid History ({product.totalBids})
             </button>
             <button className="tab-btn">Shipping & Returns</button>
@@ -315,26 +306,34 @@ This limited collector's edition includes:
                 <div className="product-specifications">
                   <h4>Specifications</h4>
                   <div className="spec-grid">
+                    {Object.entries(product.specifications).map(
+                      ([key, value]) => (
+                        <div className="spec-item" key={key}>
+                          <span className="spec-label">{key}:</span>
+                          <span>{value}</span>
+                        </div>
+                      )
+                    )}
                     <div className="spec-item">
                       <span className="spec-label">Category:</span>
                       <span>{product.category}</span>
                     </div>
                     <div className="spec-item">
-                      <span className="spec-label">Platform:</span>
-                      <span>{product.platform}</span>
+                      <span className="spec-label">Shipping:</span>
+                      <span>
+                        {product.shipping.option} (${product.shipping.cost})
+                      </span>
                     </div>
                     <div className="spec-item">
-                      <span className="spec-label">Publisher:</span>
-                      <span>{product.publisher}</span>
+                      <span className="spec-label">Return Policy:</span>
+                      <span>{product.returnPolicy}</span>
                     </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Developer:</span>
-                      <span>{product.developer}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Release Date:</span>
-                      <span>{product.releaseDate}</span>
-                    </div>
+                    {product.warranty && (
+                      <div className="spec-item">
+                        <span className="spec-label">Warranty:</span>
+                        <span>{product.warranty}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -342,25 +341,32 @@ This limited collector's edition includes:
               <div className="bid-history">
                 <h3>Bidding History</h3>
                 <div className="bid-list">
-                  {bidHistory.map((bid, index) => (
-                    <div key={index} className="bid-item">
-                      <span className="bidder">{bid.bidder}</span>
-                      <span className="amount">${bid.amount.toFixed(2)}</span>
-                      <span className="time">{bid.time}</span>
-                    </div>
-                  ))}
+                  {bidHistory.length > 0 ? (
+                    bidHistory.map((bid, index) => (
+                      <div key={index} className="bid-item">
+                        <span className="bidder">{bid.bidder}</span>
+                        <span className="amount">${bid.amount.toFixed(2)}</span>
+                        <span className="time">{bid.time}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No bids yet. Be the first to bid!</p>
+                  )}
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Related Auctions */}
         <div className="related-auctions">
           <h2>Related Auctions</h2>
           <div className="related-grid">
-            {relatedAuctions.map((auction, index) => (
-              <div key={index} className="related-card">
+            {relatedAuctions.map((auction) => (
+              <div
+                key={auction.auctionID}
+                className="related-card"
+                onClick={() => navigate(`/product/${auction.auctionID}`)}
+              >
                 <img src={auction.img} alt={auction.title} />
                 <h3>{auction.title}</h3>
                 <p>Current Bid: {auction.price}</p>

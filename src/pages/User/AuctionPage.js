@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import "../../styles/general.css";
@@ -10,7 +10,7 @@ import Footer from "../../components/Footer";
 function AuctionPage() {
   // Form state variables
   const [title, setTitle] = useState("");
-  const [categoryID, setCategoryID] = useState(1); // Default to Fashion
+  const [categoryID, setCategoryID] = useState(1);
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
   const [condition, setCondition] = useState("");
@@ -21,18 +21,60 @@ function AuctionPage() {
   const [endDate, setEndDate] = useState("");
   const [autoExtend, setAutoExtend] = useState(false);
   const [warranty, setWarranty] = useState("");
-  const [shippingOption, setShippingOption] = useState("Local Pickup");
+  const [shippingOption, setShippingOption] = useState("local");
   const [shippingCost, setShippingCost] = useState("");
-  const [returnPolicy, setReturnPolicy] = useState("No Returns");
+  const [returnPolicy, setReturnPolicy] = useState("none");
   const [extraFields, setExtraFields] = useState([]);
 
-  // Category mapping
+  // Status preview
+  const [statusPreview, setStatusPreview] = useState("");
+
+  // Calculate auction status based on dates
+  const calculateStatus = (start, end) => {
+    if (!start || !end) return "";
+
+    const now = new Date();
+    const startDateTime = new Date(start);
+    const endDateTime = new Date(end);
+
+    // Time differences in milliseconds
+    const timeToStart = startDateTime - now;
+    const timeToEnd = endDateTime - now;
+
+    // Convert to days
+    const daysToStart = timeToStart / (1000 * 60 * 60 * 24);
+    const daysToEnd = timeToEnd / (1000 * 60 * 60 * 24);
+
+    // Status logic
+    if (now > endDateTime) {
+      return "ended";
+    } else if (now < startDateTime) {
+      // Auction hasn't started yet
+      if (daysToStart <= 3) {
+        return "upcoming"; // Starting in 1-3 days
+      }
+      return "upcoming"; // Starting in more than 3 days
+    } else {
+      // Auction is currently running
+      if (daysToEnd <= 3) {
+        return "ending_soon"; // Ending in 1-3 days
+      }
+      return "live"; // More than 3 days left
+    }
+  };
+
+  // Update status preview when dates change
+  useEffect(() => {
+    const status = calculateStatus(startDate, endDate);
+    setStatusPreview(status);
+  }, [startDate, endDate]);
+
   const getCategoryID = (categoryName) => {
     const categories = {
-      Fashion: 1,
-      Electronics: 2,
-      Collectibles: 3,
-      Other: 4,
+      Fashion: 3,
+      Electronics: 1,
+      Gaming: 2,
+      Collectibles: 4,
     };
     return categories[categoryName] || 1;
   };
@@ -54,7 +96,6 @@ function AuctionPage() {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    // For now, we'll store file names. In production, you'd upload to a server
     const imageNames = files.map((file) => file.name);
     setImages(imageNames);
   };
@@ -84,23 +125,27 @@ function AuctionPage() {
       return;
     }
 
+    // Calculate status for submission
+    const calculatedStatus = calculateStatus(startDate, endDate);
+
     const auctionData = {
       title: title.trim(),
       categoryID: getCategoryID(categoryID),
       description: description.trim(),
-      images: images, // Array of image names/URLs
+      images: images,
       condition,
       tags: tags.trim(),
       reservePrice: reservePrice ? parseFloat(reservePrice) : null,
       startingBid: parseFloat(startingBid),
       startDate,
       endDate,
+      status: calculatedStatus, // Send calculated status
       autoExtend,
       warranty: warranty.trim(),
-      shippingOption,
+      shippingOption, // Now sends 'local', 'domestic', or 'worldwide'
       shippingCost: shippingCost ? parseFloat(shippingCost) : 0,
-      returnPolicy,
-      sellerID: 1, // temp: logged-in user ID
+      returnPolicy, // Now sends 'none', '7_days', or '14_days'
+      sellerID: 1,
       extraFields: extraFields.filter(
         (field) => field.name.trim() && field.description.trim()
       ),
@@ -133,8 +178,8 @@ function AuctionPage() {
         setWarranty("");
         setShippingCost("");
         setExtraFields([]);
+        setStatusPreview("");
       } else {
-        // Show detailed error information
         const errorMessage = data.details
           ? `${data.error}: ${data.details}`
           : data.error || "Unknown error";
@@ -150,6 +195,17 @@ function AuctionPage() {
         "Network error creating auction. Please check if the backend server is running and try again."
       );
     }
+  };
+
+  const getStatusBadge = () => {
+    const badges = {
+      upcoming: { text: "Starting Soon", color: "#FFA500" },
+      live: { text: "Live Auction", color: "#169976" },
+      ending_soon: { text: "Ending Soon!", color: "#FF4444" },
+      ended: { text: "Ended", color: "#666" },
+    };
+
+    return badges[statusPreview] || null;
   };
 
   return (
@@ -232,11 +288,10 @@ function AuctionPage() {
                     >
                       <option value="Fashion">Fashion</option>
                       <option value="Electronics">Electronics</option>
+                      <option value="Gaming">Gaming</option>
                       <option value="Collectibles">Collectibles</option>
-                      <option value="Other">Other</option>
                     </select>
                   </div>
-                  {/* Description */}
                   <div className="acc-box-container-item">
                     <label className="ledit2">Description *</label>
                     <textarea
@@ -273,7 +328,6 @@ function AuctionPage() {
 
                   <hr className="devider" />
 
-                  {/* Additional Item Details */}
                   <div className="acc-box">
                     <h4 className="acc-info-title">Additional Item Details</h4>
                     <p className="personal-view-descreption">
@@ -340,7 +394,6 @@ function AuctionPage() {
                   </div>
                   <hr className="devider" />
 
-                  {/* Features (checkboxes) */}
                   <div className="acc-box">
                     <h4 className="acc-info-title">Item Features</h4>
                   </div>
@@ -381,6 +434,36 @@ function AuctionPage() {
 
                 <div className="acc-box">
                   <h4 className="acc-info-title">Auction Settings</h4>
+
+                  {/* Status Preview */}
+                  {statusPreview && (
+                    <div
+                      style={{
+                        padding: "10px",
+                        marginBottom: "15px",
+                        backgroundColor: "#f5f5f5",
+                        borderRadius: "5px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <span style={{ fontWeight: "500" }}>Auction Status:</span>
+                      <span
+                        style={{
+                          padding: "4px 12px",
+                          borderRadius: "15px",
+                          backgroundColor: getStatusBadge()?.color,
+                          color: "white",
+                          fontSize: "0.9em",
+                          fontWeight: "600",
+                        }}
+                      >
+                        {getStatusBadge()?.text}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="acc-box-container">
                     <div className="acc-box-container-item">
                       <label className="ledit2">Reserve Price ($)</label>
@@ -483,13 +566,9 @@ function AuctionPage() {
                         onChange={(e) => setShippingOption(e.target.value)}
                         required
                       >
-                        <option value="Local Pickup">Local Pickup</option>
-                        <option value="Domestic Shipping">
-                          Domestic Shipping
-                        </option>
-                        <option value="Worldwide Shipping">
-                          Worldwide Shipping
-                        </option>
+                        <option value="local">Local Pickup</option>
+                        <option value="domestic">Domestic Shipping</option>
+                        <option value="worldwide">Worldwide Shipping</option>
                       </select>
                     </div>
                     <div className="acc-box-container-item">
@@ -514,9 +593,9 @@ function AuctionPage() {
                       onChange={(e) => setReturnPolicy(e.target.value)}
                       required
                     >
-                      <option value="No Returns">No Returns</option>
-                      <option value="7 Days">7 Days</option>
-                      <option value="14 Days">14 Days</option>
+                      <option value="none">No Returns</option>
+                      <option value="7_days">7 Days</option>
+                      <option value="14_days">14 Days</option>
                     </select>
                   </div>
                 </div>

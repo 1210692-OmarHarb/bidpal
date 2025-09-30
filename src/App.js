@@ -51,7 +51,7 @@ function App() {
         <Route path="/groupspage" element={<GroupsPage />} />
         <Route path="/joingroupspage" element={<JoinGroupsPage />} />
         <Route path="/creategrouppage" element={<CreateGroupPage />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/product/:auctionID" element={<Product />} />
         <Route path="/checkout" element={<CheckoutPageWrapper />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/notification" element={<Notification />} />

@@ -101,24 +101,26 @@ router.get("/featured", async (req, res) => {
 });
 
 /**
- * 🔹 5. Tabbed Auctions (live / upcoming / ending soon)
+ * 🔹 5. Tabbed Auctions (live / upcoming / ending_soon)
  */
 router.get("/tabs/:status", async (req, res) => {
   const { status } = req.params;
 
   try {
     let query;
+
     if (status === "ending") {
-      // ending soon = live auctions ordered by endDate
+      // Get auctions with 'ending_soon' status
       query = `
         SELECT a.auctionID, a.title, a.currentHighestBid, a.endDate, i.images
         FROM auction a
         JOIN item i ON a.itemID = i.itemID
-        WHERE a.status = 'live'
+        WHERE a.status = 'ending_soon'
         ORDER BY a.endDate ASC
         LIMIT 10
       `;
     } else {
+      // Get auctions by exact status match
       query = `
         SELECT a.auctionID, a.title, a.startingPrice, a.currentHighestBid, a.startDate, a.endDate, i.images
         FROM auction a
