@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -6,6 +7,7 @@ import axios from "axios";
 import "../../styles/homePage.css";
 
 function Homepage() {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [carouselItems, setCarouselItems] = useState([]);
@@ -23,6 +25,9 @@ function Homepage() {
   const [tabSlideIndex, setTabSlideIndex] = useState(0);
 
   const [imageProgress, setImageProgress] = useState(0);
+  const [wishlist, setWishlist] = useState(new Set());
+  const [sparklingItems, setSparklingItems] = useState(new Set());
+
   // Create flat array of all images from all carousel items
   const allImages = carouselItems.flatMap((item, itemIdx) =>
     item.images.map((img, imgIdx) => ({
@@ -94,9 +99,37 @@ function Homepage() {
       return () => clearInterval(progressInterval);
     }
   }, [allImages.length]);
+
   const handleThumbnailClick = (index) => {
     setCurrentIndex(index);
     setImageProgress(0);
+  };
+
+  // Navigate to product page
+  const handleBid = (auctionID) => {
+    navigate(`/product/${auctionID}`);
+  };
+
+  // Handle wishlist toggle
+  const handleWishlist = (auctionID) => {
+    setWishlist((prev) => {
+      const newWishlist = new Set(prev);
+      if (newWishlist.has(auctionID)) {
+        newWishlist.delete(auctionID);
+      } else {
+        newWishlist.add(auctionID);
+        // Add sparkling effect
+        setSparklingItems((prev) => new Set(prev).add(auctionID));
+        setTimeout(() => {
+          setSparklingItems((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(auctionID);
+            return newSet;
+          });
+        }, 1000);
+      }
+      return newWishlist;
+    });
   };
 
   // Featured auctions slider controls
@@ -157,13 +190,58 @@ function Homepage() {
                 <img
                   src={allImages[currentIndex].src}
                   alt={allImages[currentIndex].title}
-                  className="carousel-item-img"
+                  className="carousel-item-img clickable-image"
+                  onClick={() =>
+                    handleBid(
+                      carouselItems[allImages[currentIndex].auctionIndex]
+                        .auctionID
+                    )
+                  }
                 />
                 <div className="carousel-info">
                   <h2>{allImages[currentIndex].title}</h2>
                   <p>{allImages[currentIndex].description}</p>
-                  <button>Place Bid</button>
-                  <button>Add to Watchlist</button>
+
+                  <button
+                    onClick={() =>
+                      handleBid(
+                        carouselItems[allImages[currentIndex].auctionIndex]
+                          .auctionID
+                      )
+                    }
+                  >
+                    Place Bid
+                  </button>
+                  <button
+                    className={`wishlist-btn ${
+                      wishlist.has(
+                        carouselItems[allImages[currentIndex].auctionIndex]
+                          .auctionID
+                      )
+                        ? "added"
+                        : ""
+                    } ${
+                      sparklingItems.has(
+                        carouselItems[allImages[currentIndex].auctionIndex]
+                          .auctionID
+                      )
+                        ? "sparkling"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleWishlist(
+                        carouselItems[allImages[currentIndex].auctionIndex]
+                          .auctionID
+                      )
+                    }
+                  >
+                    {wishlist.has(
+                      carouselItems[allImages[currentIndex].auctionIndex]
+                        .auctionID
+                    )
+                      ? "Added to Wishlist"
+                      : "Add to Wishlist"}
+                  </button>
                 </div>
               </div>
             </section>
@@ -232,7 +310,12 @@ function Homepage() {
             >
               {featuredAuctions.map((a) => (
                 <div key={a.auctionID} className="auction-card">
-                  <img src={a.images[0]} alt={a.title} />
+                  <img
+                    src={a.images[0]}
+                    alt={a.title}
+                    className="clickable-image"
+                    onClick={() => handleBid(a.auctionID)}
+                  />
 
                   {/* Category + Title */}
                   <p className="auction-category">{a.categoryName}</p>
@@ -290,8 +373,13 @@ function Homepage() {
               }}
             >
               {tabAuctions[activeTab].map((a) => (
-                <div key={a.auctionID} className="auction-card ">
-                  <img src={a.images[0]} alt={a.title} />
+                <div key={a.auctionID} className="auction-card">
+                  <img
+                    src={a.images[0]}
+                    alt={a.title}
+                    className="clickable-image"
+                    onClick={() => handleBid(a.auctionID)}
+                  />
                   <h3>{a.title}</h3>
                   <p>Highest Bid: ${a.currentHighestBid}</p>
                   <p>Ends: {a.endDate}</p>

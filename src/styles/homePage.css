@@ -361,3 +361,117 @@
     height: 200px;
   }
 }
+
+/* ---------------------------------------------------------*/
+/* Clickable Images */
+/* ---------------------------------------------------------*/
+
+.clickable-image {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clickable-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Wishlist Button */
+.wishlist-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.wishlist-btn.added {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Sparkling Effect */
+.wishlist-btn.sparkling {
+  animation: sparkle 1s ease-in-out;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(255, 215, 0, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.8),
+      0 0 40px 20px rgba(255, 215, 0, 0.4);
+  }
+}
+
+.wishlist-btn.sparkling::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+/* Sparkle particles */
+.wishlist-btn.sparkling::after {
+  content: "✨";
+  position: absolute;
+  font-size: 20px;
+  animation: sparkleParticles 1s ease-out;
+  pointer-events: none;
+}
+
+@keyframes sparkleParticles {
+  0% {
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -150%) scale(1.5);
+  }
+  100% {
+    top: -20%;
+    opacity: 0;
+    transform: translate(-50%, -200%) scale(0.5);
+  }
+}
+
+/* Additional sparkle effect with multiple particles */
+.wishlist-btn.sparkling {
+  animation: sparkle 1s ease-in-out, pulse 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}

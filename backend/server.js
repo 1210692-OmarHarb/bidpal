@@ -4,6 +4,7 @@ import db from "./db.js"; // ADD THIS - Import database
 import auctionsRoutes from "./routes/auctionsRoutes.js";
 import homepageRoutes from "./routes/homeRoutes.js";
 import productRouter from "./routes/productRouter.js";
+
 import "./routes/cronJobs.js";
 import authRoutes from "./routes/authRoutes.js";
 

@@ -111,6 +111,17 @@ function ProfilePage() {
                 <p className="acc-info-address para1">Address</p>
                 <div className="acc-box-container">
                   <div className="acc-box-container-item">
+                    <label className="address-label ledit2">country</label>
+                    <input className="input-data-address input11"></input>
+                  </div>
+                  <div className="acc-box-container-item">
+                    <label className="city-label ledit2">City</label>
+                    <input className="input-data-city input11"></input>
+                  </div>
+                </div>
+
+                <div className="acc-box-container">
+                  <div className="acc-box-container-item">
                     <label className="address-label ledit2">Address line</label>
                     <input className="input-data-address input11"></input>
                   </div>

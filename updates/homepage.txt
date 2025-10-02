@@ -1,205 +1,221 @@
+import React, { useState, useEffect } from "react";
+import Navigation from "../../components/Navigation";
+import Footer from "../../components/Footer";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import axios from "axios";
+import "../../styles/homePage.css";
+
 function Homepage() {
+  const [categories, setCategories] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [carouselItems, setCarouselItems] = useState([]);
+  const [featuredAuctions, setFeaturedAuctions] = useState([]);
+  const [tabAuctions, setTabAuctions] = useState({
+    live: [],
+    upcoming: [],
+    ending: [],
+  });
+
   const [activeTab, setActiveTab] = useState("live");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [featuredSlideIndex, setFeaturedSlideIndex] = useState(0);
+  const [tabSlideIndex, setTabSlideIndex] = useState(0);
 
-  const carouselItems = [
-    {
-      img: "/img/auction1.png",
-      title: "Nike Air Jordan Rare Edition",
-      desc: "Exclusive drop — limited quantity.",
-    },
-    {
-      img: "/img/auction2.png",
-      title: "Louis Vuitton Collector’s Bag",
-      desc: "Luxury piece for premium collectors.",
-    },
-    {
-      img: "/img/auction3.png",
-      title: "Vintage Rolex Watch",
-      desc: "Timeless design, exclusive drop.",
-    },
-    {
-      img: "/img/auction4.png",
-      title: "Rare Comic Book",
-      desc: "Marvel #1, iconic collectible.",
-    },
-    {
-      img: "/img/auction5.png",
-      title: "MacBook Pro 2025",
-      desc: "Powerful performance for creators.",
-    },
-  ];
-
-  // Auto-change every 3s
+  // Fetch all homepage data
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [carouselItems.length]);
+    axios
+      .get("http://localhost:5000/api/homepage/categories")
+      .then((res) => setCategories(res.data));
+
+    axios
+      .get("http://localhost:5000/api/homepage/statuses")
+      .then((res) => setStatuses(res.data));
+
+    axios
+      .get("http://localhost:5000/api/homepage/carousel")
+      .then((res) => setCarouselItems(res.data));
+
+    axios
+      .get("http://localhost:5000/api/homepage/featured")
+      .then((res) => setFeaturedAuctions(res.data));
+
+    ["live", "upcoming", "ending"].forEach((status) => {
+      axios
+        .get(`http://localhost:5000/api/homepage/auctions/${status}`)
+        .then((res) =>
+          setTabAuctions((prev) => ({ ...prev, [status]: res.data }))
+        );
+    });
+  }, []);
+
+  // Auto carousel
+  useEffect(() => {
+    if (carouselItems.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [carouselItems]);
+  // Featured auctions slider controls
+  const nextFeatured = () => {
+    setFeaturedSlideIndex((prev) =>
+      prev + 3 >= featuredAuctions.length ? 0 : prev + 3
+    );
+  };
+
+  const prevFeatured = () => {
+    setFeaturedSlideIndex((prev) =>
+      prev - 3 < 0 ? Math.max(0, featuredAuctions.length - 3) : prev - 3
+    );
+  };
+  const nextTab = () => {
+    const currentAuctions = tabAuctions[activeTab];
+    setTabSlideIndex((prev) =>
+      prev + 3 >= currentAuctions.length ? 0 : prev + 3
+    );
+  };
+
+  const prevTab = () => {
+    const currentAuctions = tabAuctions[activeTab];
+    setTabSlideIndex((prev) =>
+      prev - 3 < 0 ? Math.max(0, currentAuctions.length - 3) : prev - 3
+    );
+  };
 
   return (
     <>
       <Navigation />
-      <main className="homepage">
+      <div className="homepage">
+        {/* === Search bar === */}
         <div className="auction-search-bar">
           <input type="text" placeholder="Search auctions..." />
           <select>
-            <option>All Categories</option>
-            <option>Fashion</option>
-            <option>Electronics</option>
-            <option>Collectibles</option>
+            <option value="">All Categories</option>
+            {categories.map((c) => (
+              <option key={c.categoryID}>{c.name}</option>
+            ))}
           </select>
           <select>
-            <option>Status</option>
-            <option>Live</option>
-            <option>Upcoming</option>
-            <option>Ended</option>
+            <option value="">Status</option>
+            {statuses.map((s, idx) => (
+              <option key={idx}>{s}</option>
+            ))}
           </select>
           <button className="search-btn">Search</button>
         </div>
 
-        <section className="hero-carousel">
-          <div className="carousel-item">
-            <img
-              src={carouselItems[currentIndex].img}
-              alt={carouselItems[currentIndex].title}
-              className="carousel-item imgroot505"
-            />
-            <div className="carousel-info">
-              <h2>{carouselItems[currentIndex].title}</h2>
-              <p>{carouselItems[currentIndex].desc}</p>
-              <button>Place Bid</button>
-              <button>Add to Watchlist</button>
+        {/* === Hero carousel === */}
+        {carouselItems.length > 0 && (
+          <section className="hero-carousel">
+            <div className="carousel-item">
+              <img
+                src={JSON.parse(carouselItems[currentIndex].images)[0]}
+                alt={carouselItems[currentIndex].title}
+                className="carousel-item-img"
+              />
+              <div className="carousel-info">
+                <h2>{carouselItems[currentIndex].title}</h2>
+                <p>{carouselItems[currentIndex].description}</p>
+                <button>Place Bid</button>
+                <button>Add to Watchlist</button>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="featured-auctions">
-          <h2>Discover New Featured Auctions</h2>
-          <div className="auction-grid">
-            <div className="auction-card">
-              <img src="/img/auction2.png" alt="Auction" />
-              <h3>Louis Vuitton Bag</h3>
-              <p>Starting Price: $500</p>
+          <div className="section-header">
+            <h2>Discover New Featured Auctions</h2>
+            <div className="slider-controls">
+              <button onClick={prevFeatured} className="slider-btn">
+                <ChevronLeft size={20} />
+              </button>
+              <button onClick={nextFeatured} className="slider-btn">
+                <ChevronRight size={20} />
+              </button>
             </div>
-            <div className="auction-card">
-              <img src="/img/auction3.png" alt="Auction" />
-              <h3>Vintage Rolex</h3>
-              <p>Starting Price: $5,000</p>
-            </div>
-            <div className="auction-card">
-              <img src="/img/auction3.png" alt="Auction" />
-              <h3>Vintage Rolex</h3>
-              <p>Starting Price: $5,000</p>
-            </div>
-            <div className="auction-card">
-              <img src="/img/auction3.png" alt="Auction" />
-              <h3>Vintage Rolex</h3>
-              <p>Starting Price: $5,000</p>
-            </div>
-            <div className="auction-card">
-              <img src="/img/auction3.png" alt="Auction" />
-              <h3>Vintage Rolex</h3>
-              <p>Starting Price: $5,000</p>
+          </div>
+
+          <div className="slider-container">
+            <div
+              className="auction-slider"
+              style={{
+                transform: `translateX(-${featuredSlideIndex * (100 / 3)}%)`,
+                transition: "transform 0.3s ease-in-out",
+              }}
+            >
+              {featuredAuctions.map((a) => (
+                <div key={a.auctionID} className="auction-card">
+                  <img src={a.images[0]} alt={a.title} />
+
+                  {/* Category + Title */}
+                  <p className="auction-category">{a.categoryName}</p>
+                  <h3>{a.title}</h3>
+
+                  {/* Conditional logic */}
+                  {a.status === "upcoming" ? (
+                    <>
+                      <p>
+                        Available: {new Date(a.startDate).toLocaleDateString()}
+                      </p>
+                      <p>Starting Price: ${a.startingPrice}</p>
+                    </>
+                  ) : a.status === "live" ? (
+                    <p>Starting Price: ${a.startingPrice}</p>
+                  ) : null}
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* === Auction Categories (Tabs) === */}
+        {/* === Tabs === */}
         <section className="auction-tabs">
           <nav className="tabs-nav">
-            <button
-              className={activeTab === "live" ? "active" : ""}
-              onClick={() => setActiveTab("live")}
-            >
-              Live
-            </button>
-            <button
-              className={activeTab === "upcoming" ? "active" : ""}
-              onClick={() => setActiveTab("upcoming")}
-            >
-              Upcoming
-            </button>
-            <button
-              className={activeTab === "ending" ? "active" : ""}
-              onClick={() => setActiveTab("ending")}
-            >
-              Ending Soon
-            </button>
+            {["live", "upcoming", "ending"].map((tab) => (
+              <button
+                key={tab}
+                className={activeTab === tab ? "active" : ""}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
           </nav>
-
-          <div className="auction-list">
-            {activeTab === "live" && (
-              <div className="auction-grid">
-                <div className="auction-card">
-                  <img src="/img/auction4.png" alt="Auction" class="" />
-                  <h3>Rare Comic Book</h3>
-                  <p>Highest Bid: $300</p>
-                  <p>Ends in: 2h 30m</p>
+          <div className="section-header">
+            <h3>
+              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Auctions
+            </h3>
+            <div className="slider-controls">
+              <button onClick={prevTab} className="slider-btn">
+                <ChevronLeft size={20} />
+              </button>
+              <button onClick={nextTab} className="slider-btn">
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+          <div className="slider-container">
+            <div
+              className="auction-slider"
+              style={{
+                transform: `translateX(-${tabSlideIndex * (100 / 3)}%)`,
+                transition: "transform 0.3s ease-in-out",
+              }}
+            >
+              {tabAuctions[activeTab].map((a) => (
+                <div key={a.auctionID} className="auction-card tab-card">
+                  <img src={JSON.parse(a.images)[0]} alt={a.title} />
+                  <h3>{a.title}</h3>
+                  <p>Highest Bid: ${a.currentHighestBid}</p>
+                  <p>Ends: {a.endDate}</p>
                 </div>
-                <div className="auction-card">
-                  <img src="/img/auction4.png" alt="Auction" class="" />
-                  <h3>Rare Comic Book</h3>
-                  <p>Highest Bid: $300</p>
-                  <p>Ends in: 2h 30m</p>
-                </div>
-                <div className="auction-card">
-                  <img src="/img/auction4.png" alt="Auction" class="" />
-                  <h3>Rare Comic Book</h3>
-                  <p>Highest Bid: $300</p>
-                  <p>Ends in: 2h 30m</p>
-                </div>
-              </div>
-            )}
-            {activeTab === "upcoming" && (
-              <div className="auction-grid">
-                <div className="auction-card">
-                  <img src="/img/auction5.png" alt="Auction" />
-                  <h3>MacBook Pro</h3>
-                  <p>Reserve Price: $1,200</p>
-                  <p>Starts: Tomorrow</p>
-                </div>
-                <div className="auction-card">
-                  <img src="/img/auction5.png" alt="Auction" />
-                  <h3>MacBook Pro</h3>
-                  <p>Reserve Price: $1,200</p>
-                  <p>Starts: Tomorrow</p>
-                </div>
-                <div className="auction-card">
-                  <img src="/img/auction5.png" alt="Auction" />
-                  <h3>MacBook Pro</h3>
-                  <p>Reserve Price: $1,200</p>
-                  <p>Starts: Tomorrow</p>
-                </div>
-              </div>
-            )}
-            {activeTab === "ending" && (
-              <div className="auction-grid">
-                <div className="auction-card">
-                  <img src="/img/auction1.png" alt="Auction" />
-                  <h3>Luxury Car Auction</h3>
-                  <p>Highest Bid: $50,000</p>
-                  <p>Ending Soon</p>
-                </div>
-
-                <div className="auction-card">
-                  <img src="/img/auction1.png" alt="Auction" />
-                  <h3>Luxury Car Auction</h3>
-                  <p>Highest Bid: $50,000</p>
-                  <p>Ending Soon</p>
-                </div>
-                <div className="auction-card">
-                  <img src="/img/auction1.png" alt="Auction" />
-                  <h3>Luxury Car Auction</h3>
-                  <p>Highest Bid: $50,000</p>
-                  <p>Ending Soon</p>
-                </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </section>
-      </main>
+      </div>
       <Footer />
     </>
   );
