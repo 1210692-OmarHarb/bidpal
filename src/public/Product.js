@@ -40,6 +40,7 @@ function Product() {
   const [product, setProduct] = useState(null);
   const [bidHistory, setBidHistory] = useState([]);
   const [relatedAuctions, setRelatedAuctions] = useState([]);
+  const [activeTab, setActiveTab] = useState("description");
 
   // Fetch product data on mount
   useEffect(() => {
@@ -286,58 +287,37 @@ function Product() {
         <div className="product-tabs">
           <div className="tab-buttons">
             <button
-              className="tab-btn"
-              onClick={() => setShowBidHistory(false)}
+              className={`tab-btn ${
+                !showBidHistory && activeTab === "description" ? "active" : ""
+              }`}
+              onClick={() => {
+                setShowBidHistory(false);
+                setActiveTab("description");
+              }}
             >
               Description
             </button>
-            <button className="tab-btn" onClick={() => setShowBidHistory(true)}>
+            <button
+              className={`tab-btn ${showBidHistory ? "active" : ""}`}
+              onClick={() => setShowBidHistory(true)}
+            >
               Bid History ({product.totalBids})
             </button>
-            <button className="tab-btn">Shipping & Returns</button>
+            <button
+              className={`tab-btn ${
+                !showBidHistory && activeTab === "shipping" ? "active" : ""
+              }`}
+              onClick={() => {
+                setShowBidHistory(false);
+                setActiveTab("shipping");
+              }}
+            >
+              Shipping & Returns
+            </button>
           </div>
 
           <div className="tab-content">
-            {!showBidHistory ? (
-              <div className="description-content">
-                <h3>Product Description</h3>
-                <p>{product.description}</p>
-
-                <div className="product-specifications">
-                  <h4>Specifications</h4>
-                  <div className="spec-grid">
-                    {Object.entries(product.specifications).map(
-                      ([key, value]) => (
-                        <div className="spec-item" key={key}>
-                          <span className="spec-label">{key}:</span>
-                          <span>{value}</span>
-                        </div>
-                      )
-                    )}
-                    <div className="spec-item">
-                      <span className="spec-label">Category:</span>
-                      <span>{product.category}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Shipping:</span>
-                      <span>
-                        {product.shipping.option} (${product.shipping.cost})
-                      </span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Return Policy:</span>
-                      <span>{product.returnPolicy}</span>
-                    </div>
-                    {product.warranty && (
-                      <div className="spec-item">
-                        <span className="spec-label">Warranty:</span>
-                        <span>{product.warranty}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
+            {showBidHistory ? (
               <div className="bid-history">
                 <h3>Bidding History</h3>
                 <div className="bid-list">
@@ -351,6 +331,83 @@ function Product() {
                     ))
                   ) : (
                     <p>No bids yet. Be the first to bid!</p>
+                  )}
+                </div>
+              </div>
+            ) : activeTab === "description" ? (
+              <div className="description-content">
+                <h3>Product Description</h3>
+                <p>{product.description}</p>
+
+                <div className="product-specifications">
+                  <h4>Specifications</h4>
+                  <div className="spec-grid">
+                    <div className="spec-item">
+                      <span className="spec-label">Category:</span>
+                      <span>{product.category}</span>
+                    </div>
+                    <div className="spec-item">
+                      <span className="spec-label">Condition:</span>
+                      <span>{product.condition}</span>
+                    </div>
+                    {product.warranty && (
+                      <div className="spec-item">
+                        <span className="spec-label">Warranty:</span>
+                        <span>{product.warranty}</span>
+                      </div>
+                    )}
+                    {Object.entries(product.specifications).map(
+                      ([key, value]) => (
+                        <div className="spec-item" key={key}>
+                          <span className="spec-label">{key}:</span>
+                          <span>{value}</span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="shipping-content">
+                <h3>Shipping Information</h3>
+                <div className="spec-grid">
+                  <div className="spec-item">
+                    <span className="spec-label">Shipping Method:</span>
+                    <span>
+                      {product.shipping.option === "local"
+                        ? "Local Pickup Only"
+                        : product.shipping.option === "domestic"
+                        ? "Domestic Shipping"
+                        : "Worldwide Shipping"}
+                    </span>
+                  </div>
+                  <div className="spec-item">
+                    <span className="spec-label">Shipping Cost:</span>
+                    <span>
+                      {product.shipping.cost === 0
+                        ? "Free"
+                        : `$${product.shipping.cost.toFixed(2)}`}
+                    </span>
+                  </div>
+                </div>
+
+                <h3 style={{ marginTop: "2rem" }}>Return Policy</h3>
+                <div className="spec-grid">
+                  <div className="spec-item">
+                    <span className="spec-label">Returns Accepted:</span>
+                    <span>
+                      {product.returnPolicy === "none"
+                        ? "No Returns"
+                        : product.returnPolicy === "7_days"
+                        ? "Within 7 Days"
+                        : "Within 14 Days"}
+                    </span>
+                  </div>
+                  {product.returnPolicy !== "none" && (
+                    <div className="spec-item">
+                      <span className="spec-label">Return Shipping:</span>
+                      <span>Buyer pays return shipping</span>
+                    </div>
                   )}
                 </div>
               </div>

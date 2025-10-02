@@ -1,13 +1,44 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
+import { useAuth } from "../context/AuthContext";
 
 function Signin() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        login(data.user); // save user in context + localStorage
+
+        // Redirect by role
+        if (data.user.userType === "admin") navigate("/manage-accounts");
+        else navigate("/homepage");
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
+    }
+  };
 
   return (
     <>
-      <Navigation isLoggedIn={isLoggedIn} />
+      <Navigation />
 
       <main>
         <section className="section-hero">
@@ -15,7 +46,7 @@ function Signin() {
             <div class="hero-text-box user-box ">
               <h1 class="heading-primary">Sign in to BidPal</h1>
               <div>
-                <form class="user-form">
+                <form className="user-form" onSubmit={handleSubmit}>
                   <div class="form-element-email-username">
                     <span>
                       <span class="floating-label">
@@ -23,9 +54,10 @@ function Signin() {
                         <span class="textbox">
                           <input
                             type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder="Email or username"
                             required
-                            maxLength="63"
                           />
                         </span>
                       </span>
@@ -44,10 +76,11 @@ function Signin() {
                         <label>Password</label>
                         <span class="textbox">
                           <input
-                            type="text"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             placeholder="Password"
                             required
-                            maxLength="63"
                           />
                         </span>
                       </span>
@@ -61,12 +94,9 @@ function Signin() {
                     </span>
                   </div>
                   <div class="form-element-submit">
-                    <button
-                      type="submit"
-                      onClick={() => setIsLoggedIn(!isLoggedIn)}
-                    >
-                      Continue
-                    </button>
+                    <div className="form-element-submit">
+                      <button type="submit">Continue</button>
+                    </div>
                   </div>
                 </form>
               </div>

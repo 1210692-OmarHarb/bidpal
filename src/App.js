@@ -1,7 +1,13 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navigation from "./components/Navigation";
-import Footer from "./components/Footer";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import { AuthProvider, useAuth } from "./context/AuthContext";
+
 import Home from "./public/Home";
 import Signin from "./public/Signin";
 import Signup from "./public/Signup";
@@ -32,33 +38,161 @@ import "./styles/pages.css";
 import "./styles/productPage.css";
 import "./styles/homePage.css";
 
-function App() {
+function ProtectedRoute({ children, allowedRoles }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!user) return <Navigate to="/signin" />;
+
+  if (allowedRoles && !allowedRoles.includes(user.userType)) {
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
+}
+
+function AppRoutes() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/homepage" element={<Homepage />} />
-        <Route path="/auctionpage" element={<AuctionPage />} />
-        <Route path="/profilepage" element={<ProfilePage />} />
-        <Route path="/auctions" element={<Auctions />} />
-        <Route path="/bidhistory" element={<BidHistory />} />
-        <Route path="/manage-accounts" element={<ManageAccounts />} />
-        <Route path="/reports" element={<ReportsDashboard />} />
-        <Route path="/validate-org" element={<ValidateOrg />} />
-        <Route path="/groupspage" element={<GroupsPage />} />
-        <Route path="/joingroupspage" element={<JoinGroupsPage />} />
-        <Route path="/creategrouppage" element={<CreateGroupPage />} />
-        <Route path="/product/:auctionID" element={<Product />} />
-        <Route path="/checkout" element={<CheckoutPageWrapper />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/notification" element={<Notification />} />
-        <Route path="/wstest" element={<WebSocketTest />} />
-      </Routes>
-    </Router>
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Home />} />
+      <Route path="/signin" element={<Signin />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/home" element={<Home />} />
+
+      {/* Customer Routes */}
+      <Route
+        path="/homepage"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <Homepage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/product/:auctionID"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <Product />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/auctionpage"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <AuctionPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profilepage"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/auctions"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <Auctions />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bidhistory"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <BidHistory />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/wishlist"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <Wishlist />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notification"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <Notification />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Group Routes - Customer Only */}
+      <Route
+        path="/groupspage"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <GroupsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/joingroupspage"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <JoinGroupsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/creategrouppage"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <CreateGroupPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Routes */}
+      <Route
+        path="/manage-accounts"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <ManageAccounts />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reports"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <ReportsDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/validate-org"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <ValidateOrg />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="/checkout" element={<CheckoutPageWrapper />} />
+      <Route path="/wstest" element={<WebSocketTest />} />
+      <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
+    </Routes>
   );
 }
 
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
+  );
+}
 export default App;
