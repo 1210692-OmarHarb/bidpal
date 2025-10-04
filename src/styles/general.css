@@ -28,6 +28,7 @@ grey:
 #555
 blackgrey :
 #333
+  background-color: #121212;
 
 
 
@@ -148,7 +149,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #000;
+  background-color: #fff;
 
   /* Because we want header to be sticky later */
   height: 9.6rem;
@@ -269,7 +270,6 @@ body {
 /*55555555555555555555555555555*/
 
 .section-hero {
-  background-color: #e8f5f1;
   padding: 16rem 0 9.6rem 0;
 }
 
@@ -325,11 +325,11 @@ body {
 
 .btn--full:link,
 .btn--full:visited {
-  color: #fff;
+  color: #000;
 }
 .btn--full:hover,
 .btn--full:active {
-  color: #fff;
+  background-color: #e8f5f1;
 }
 
 .btn--outline:link,

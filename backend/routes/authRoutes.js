@@ -26,6 +26,16 @@ router.post("/login", async (req, res) => {
     if (user.password !== password) {
       return res.json({ success: false, message: "Invalid password" });
     }
+    if (
+      user.userType === "organization" &&
+      user.verificationStatus !== "verified"
+    ) {
+      return res
+        .status(403)
+        .json({
+          message: "Your organization account is pending admin approval.",
+        });
+    }
 
     // Success: return minimal user info (not password)
     res.json({

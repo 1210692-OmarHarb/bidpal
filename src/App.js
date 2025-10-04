@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import Home from "./public/Home";
 import Signin from "./public/Signin";
 import Signup from "./public/Signup";
+import VerifyEmail from "./public/VerifyEmail";
 import Product from "./public/Product";
 import CheckoutPageWrapper from "./public/CheckoutForm";
 
@@ -58,6 +59,7 @@ function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/home" element={<Home />} />
 
       {/* Customer Routes */}

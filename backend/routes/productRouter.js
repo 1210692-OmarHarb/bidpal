@@ -46,6 +46,7 @@ router.get("/:auctionID", async (req, res) => {
         c.name AS categoryName,
         u.userID,
         u.username
+        
       FROM auction a
       JOIN item i ON a.itemID = i.itemID
       JOIN category c ON i.categoryID = c.categoryID
