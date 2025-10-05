@@ -296,23 +296,47 @@ li {
   unicode-bidi: isolate;
 }
 
+/* ========================================== */
+/* Menu nav bar ADMINAdmin important*/
+/* ========================================== */
 .menu-box-nav-link {
-  -webkit-tap-highlight-color: transparent;
-  background-color: transparent;
-
-  cursor: pointer;
+  margin: 10px 0;
   vertical-align: middle;
   display: flex;
+  cursor: pointer;
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  text-decoration: none;
-  min-width: 0;
   box-sizing: border-box;
   text-align: left;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+}
 
-  padding: 8px 16px;
+/* Base link style */
+.menu-box-nav-link-link101 {
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: #fff;
+  background-color: transparent;
+  border: 2px solid transparent;
+}
+
+/* Hover: soft white background + black text */
+.menu-box-nav-link-link101:hover {
+  background-color: rgba(255, 255, 255, 0.85); /* not too white */
+  color: #000;
+}
+
+/* Active / Current page link */
+.menu-box-nav-link-link101.active,
+.menu-box-nav-link-link101:active {
+  border: 2px solid #fff;
+  color: #fff;
+  background-color: transparent;
 }
 
 /* ========================================== */
@@ -466,7 +490,10 @@ li {
 /* ========================================== */
 
 .section-auctions {
-  padding: 2rem;
+  padding: 8px 16px;
+  margin: 20px;
+  background-color: #fafafa;
+  min-height: 80vh;
 }
 
 .heading-secondary {

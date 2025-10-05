@@ -21,17 +21,8 @@ function Signup() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    // Clear error for this field when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = () => {
@@ -42,6 +33,11 @@ function Signup() {
         newErrors.firstName = "Please enter your first name";
       if (!formData.lastName.trim())
         newErrors.lastName = "Please enter your last name";
+      if (!formData.email.trim()) {
+        newErrors.email = "Please enter your email";
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = "Please enter a valid email";
+      }
     } else {
       if (!formData.organizationName.trim())
         newErrors.organizationName = "Please enter your organization name";
@@ -55,16 +51,9 @@ function Signup() {
 
     if (!formData.username.trim())
       newErrors.username = "Please enter your username";
-    if (!formData.email.trim()) {
-      newErrors.email = "Please enter your email";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
-    }
-    if (!formData.password) {
-      newErrors.password = "Please enter your password";
-    } else if (formData.password.length < 6) {
+    if (!formData.password) newErrors.password = "Please enter your password";
+    else if (formData.password.length < 6)
       newErrors.password = "Password must be at least 6 characters";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -73,63 +62,92 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
-
-    setLoading(true);
+    setErrors({});
     setSuccessMessage("");
 
+    if (!validateForm()) {
+      console.log("Validation failed:", errors);
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const response = await fetch("http://localhost:5000/api/signup", {
+      const endpoint =
+        accountType === "personal"
+          ? "http://localhost:5000/api/signup/signup"
+          : "http://localhost:5000/api/org-signup/org-signup";
+
+      const payload =
+        accountType === "personal"
+          ? {
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              username: formData.username,
+              email: formData.email,
+              password: formData.password,
+              userType: "user",
+            }
+          : {
+              organizationName: formData.organizationName,
+              organizationContactEmail: formData.organizationContactEmail,
+              username: formData.username,
+              password: formData.password,
+            };
+
+      console.log("Sending request to:", endpoint);
+      console.log("Payload:", payload);
+
+      const response = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          userType: accountType === "organization" ? "organization" : "user",
-          organizationContactEmail: formData.organizationContactEmail,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
+      console.log("Server response:", response.status, data);
 
       if (!response.ok) {
-        setErrors({ submit: data.message || "Registration failed" });
+        const errorMsg =
+          data.message || data.errors?.[0]?.msg || "Registration failed";
+        setErrors({ submit: errorMsg });
         setLoading(false);
         return;
       }
 
-      // Success message based on account type
-      if (accountType === "organization") {
-        setSuccessMessage(
-          "Registration successful! Please check your email to verify your account. Your organization account is pending admin approval."
-        );
-      } else {
+      if (accountType === "personal") {
         setSuccessMessage(
           "Registration successful! Please check your email to verify your account before signing in."
         );
+
+        setFormData({
+          firstName: "",
+          lastName: "",
+          username: "",
+          email: "",
+          password: "",
+          organizationName: "",
+          organizationContactEmail: "",
+        });
+
+        setTimeout(() => navigate("/signin"), 3000);
+      } else {
+        setSuccessMessage(
+          "Organization registered successfully! Admin will review and approve your account."
+        );
+
+        setFormData({
+          firstName: "",
+          lastName: "",
+          username: "",
+          email: "",
+          password: "",
+          organizationName: "",
+          organizationContactEmail: "",
+        });
       }
-
-      // Clear form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        password: "",
-        organizationName: "",
-        organizationContactEmail: "",
-      });
-
-      // Redirect to signin after 3 seconds
-      setTimeout(() => {
-        navigate("/signin");
-      }, 3000);
-    } catch (error) {
+    } catch (err) {
+      console.error("Network error:", err);
       setErrors({ submit: "Network error. Please try again." });
     } finally {
       setLoading(false);
@@ -159,12 +177,14 @@ function Signup() {
 
               <div className="signup-picks">
                 <button
+                  type="button"
                   onClick={() => setAccountType("personal")}
                   className={accountType === "personal" ? "active" : ""}
                 >
                   Personal
                 </button>
                 <button
+                  type="button"
                   onClick={() => setAccountType("organization")}
                   className={accountType === "organization" ? "active" : ""}
                 >
@@ -182,7 +202,7 @@ function Signup() {
                             <input
                               type="text"
                               name="firstName"
-                              placeholder="firstname"
+                              placeholder="First Name"
                               value={formData.firstName}
                               onChange={handleInputChange}
                               maxLength="63"
@@ -206,7 +226,7 @@ function Signup() {
                             <input
                               type="text"
                               name="lastName"
-                              placeholder="lastname"
+                              placeholder="Last Name"
                               value={formData.lastName}
                               onChange={handleInputChange}
                               maxLength="63"
@@ -304,11 +324,12 @@ function Signup() {
                     <div className="form-element-orgname">
                       <span>
                         <span className="floating-label">
+                          <label>Organization Name</label>
                           <span className="textbox">
                             <input
                               type="text"
                               name="organizationName"
-                              placeholder="Organization"
+                              placeholder="Organization Name"
                               value={formData.organizationName}
                               onChange={handleInputChange}
                               maxLength="63"
@@ -368,28 +389,6 @@ function Signup() {
                             <span className="username-error">
                               {errors.username}
                             </span>
-                          </div>
-                        </span>
-                      </span>
-                    </div>
-
-                    <div className="form-element-email">
-                      <span>
-                        <span className="floating-label">
-                          <label>Email</label>
-                          <span className="textbox">
-                            <input
-                              type="email"
-                              name="email"
-                              placeholder="Email"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                            />
-                          </span>
-                        </span>
-                        <span className="error-message">
-                          <div>
-                            <span className="email-error">{errors.email}</span>
                           </div>
                         </span>
                       </span>

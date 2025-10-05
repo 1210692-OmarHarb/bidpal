@@ -483,8 +483,6 @@ body {
 */
 *:focus {
   outline: none;
-
-  box-shadow: 0 0 0 0.8rem #148a6a;
 }
 
 /* HELPER/SETTINGS CLASSES */
@@ -726,4 +724,14 @@ input:invalid ~ .error-message {
     flex-direction: column;
     gap: 20px;
   }
+}
+/* =========================== */
+/*  (Admin) NAV LINKS  */
+/* =========================== */
+.main-box-nav-link-link101 {
+  color: #fff;
+  text-decoration: none;
+  border-radius: 1px;
+  border-width: 1px;
+  border-color: #fff;
 }
