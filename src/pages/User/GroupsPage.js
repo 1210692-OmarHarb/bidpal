@@ -14,8 +14,8 @@ function GroupsPage() {
     <>
       <Navigation />
       <main>
-        <section className="section groups-view">
-          <div className="hero groups-menu">
+        <section className="section personal-view">
+          <div className="hero personal-menu">
             <div className="menu">
               <div className="menu-box">
                 <li className="menu-box-nav-header">
@@ -55,13 +55,16 @@ function GroupsPage() {
                   <div className="menu-box-nav-link">
                     <Link to="/groupspage">My Group</Link>
                   </div>
+                  <div className="menu-box-nav-link">
+                    <Link to="/joingroupspage">Join a Group</Link>
+                  </div>
                 </li>
               </div>
               <hr />
             </div>
 
             <div className="section-groups">
-              <h2 className="heading-secondary">My Group Management</h2>
+              <h2 className="personal-view-title">My Group Management</h2>
 
               <div className="group-tabs">
                 <button

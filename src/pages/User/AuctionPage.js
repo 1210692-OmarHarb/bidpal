@@ -253,6 +253,9 @@ function AuctionPage() {
                   <div className="menu-box-nav-link">
                     <Link to="/groupspage">My Group</Link>
                   </div>
+                  <div className="menu-box-nav-link">
+                    <Link to="/joingroupspage">Join a Group</Link>
+                  </div>
                 </li>
               </div>
               <hr />

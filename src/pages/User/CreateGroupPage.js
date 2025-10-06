@@ -12,8 +12,8 @@ function CreateGroupPage() {
     <>
       <Navigation />
       <main>
-        <section className="section groups-view">
-          <div className="hero groups-menu">
+        <section className="section personal-view">
+          <div className="hero personal-menu">
             <div className="menu">
               <div className="menu-box">
                 <li className="menu-box-nav-header">
@@ -53,13 +53,17 @@ function CreateGroupPage() {
                   <div className="menu-box-nav-link">
                     <Link to="/groupspage">My Group</Link>
                   </div>
+                  <div className="menu-box-nav-link">
+                    <Link to="/joingroupspage">Join a Group</Link>
+                  </div>
                 </li>
               </div>
               <hr />
             </div>
 
             <div className="section-groups">
-              <h2 className="heading-secondary">Create a Group</h2>
+              <h2 className="personal-view-title">Create a Group</h2>
+
               <p className="sub-text">
                 You can only create **one group**. Once created, you will be the
                 admin and manage it under <b>My Group</b>.
@@ -82,6 +86,15 @@ function CreateGroupPage() {
                     rows="4"
                     required
                   ></textarea>
+                </div>
+                <div className="form-element">
+                  <label className="ledit2">Upload Group Image</label>
+                  <input
+                    className="input11"
+                    type="file"
+                    multiple
+                    accept="image/*"
+                  />
                 </div>
 
                 <div className="form-element-submit">
