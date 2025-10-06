@@ -354,7 +354,7 @@ function Homepage() {
 
         <section className="featured-auctions">
           <div className="section-header">
-            <h2>Discover New Featured Auctions</h2>
+            <h3>Discover New Featured Auctions</h3>
             <div className="slider-controls">
               <button onClick={prevFeatured} className="slider-btn">
                 <ChevronLeft size={20} />
