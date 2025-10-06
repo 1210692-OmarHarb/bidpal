@@ -60,7 +60,6 @@ router.get("/carousel", async (req, res) => {
 /**
  * 🔹 4. Featured Auctions (for now: newest 10 auctions, later add "featured" flag)
  */
-// backend/routes/homepage.js
 router.get("/featured", async (req, res) => {
   try {
     const [rows] = await db.query(`
@@ -142,6 +141,126 @@ router.get("/tabs/:status", async (req, res) => {
   } catch (err) {
     console.error("Error fetching tab auctions:", err);
     res.status(500).json({ error: "Failed to fetch tab auctions" });
+  }
+});
+
+/**
+ * 🔹 6. Get auctions by category
+ */
+router.get("/category/:categoryName", async (req, res) => {
+  const { categoryName } = req.params;
+
+  try {
+    const [results] = await db.query(
+      `
+      SELECT 
+        a.auctionID,
+        a.title,
+        a.description,
+        a.startingPrice,
+        a.currentHighestBid,
+        a.status,
+        a.startDate,
+        a.endDate,
+        a.itemCondition,
+        i.images,
+        c.name as categoryName
+      FROM auction a
+      JOIN item i ON a.itemID = i.itemID
+      JOIN category c ON i.categoryID = c.categoryID
+      WHERE c.name = ?
+      ORDER BY 
+        CASE 
+          WHEN a.status = 'live' THEN 1
+          WHEN a.status = 'ending_soon' THEN 2
+          WHEN a.status = 'upcoming' THEN 3
+          ELSE 4
+        END,
+        a.endDate ASC
+    `,
+      [categoryName]
+    );
+
+    const formatted = results.map((auction) => ({
+      ...auction,
+      images: JSON.parse(auction.images || "[]"),
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error("Error fetching category auctions:", err);
+    res.status(500).json({ error: "Failed to fetch category auctions" });
+  }
+});
+
+/**
+ * 🔹 7. Search auctions with filters
+ */
+router.get("/search", async (req, res) => {
+  const { q, category, status } = req.query;
+
+  let query = `
+    SELECT 
+      a.auctionID,
+      a.title,
+      a.description,
+      a.startingPrice,
+      a.currentHighestBid,
+      a.status,
+      a.startDate,
+      a.endDate,
+      a.itemCondition,
+      i.images,
+      c.name as categoryName
+    FROM auction a
+    JOIN item i ON a.itemID = i.itemID
+    JOIN category c ON i.categoryID = c.categoryID
+    WHERE 1=1
+  `;
+
+  const params = [];
+
+  // Add search query filter
+  if (q && q.trim()) {
+    query += ` AND (a.title LIKE ? OR a.description LIKE ? OR i.name LIKE ?)`;
+    const searchTerm = `%${q}%`;
+    params.push(searchTerm, searchTerm, searchTerm);
+  }
+
+  // Add category filter
+  if (category && category.trim()) {
+    query += ` AND c.name = ?`;
+    params.push(category);
+  }
+
+  // Add status filter
+  if (status && status.trim()) {
+    query += ` AND a.status = ?`;
+    params.push(status);
+  }
+
+  query += ` ORDER BY 
+    CASE 
+      WHEN a.status = 'live' THEN 1
+      WHEN a.status = 'ending_soon' THEN 2
+      WHEN a.status = 'upcoming' THEN 3
+      ELSE 4
+    END,
+    a.endDate ASC
+  `;
+
+  try {
+    const [results] = await db.query(query, params);
+
+    const formatted = results.map((auction) => ({
+      ...auction,
+      images: JSON.parse(auction.images || "[]"),
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error("Error searching auctions:", err);
+    res.status(500).json({ error: "Failed to search auctions" });
   }
 });
 

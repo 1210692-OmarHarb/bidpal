@@ -45,12 +45,11 @@ function Signin() {
           <div class="hero">
             <div class="hero-text-box user-box ">
               <h1 class="heading-primary">Sign in to BidPal</h1>
-              <div>
+              <div className="user">
                 <form className="user-form" onSubmit={handleSubmit}>
                   <div class="form-element-email-username">
                     <span>
                       <span class="floating-label">
-                        <label>Email or username</label>
                         <span class="textbox">
                           <input
                             type="text"
@@ -73,7 +72,6 @@ function Signin() {
                   <div class="form-element-password">
                     <span>
                       <span class="floating-label">
-                        <label>Password</label>
                         <span class="textbox">
                           <input
                             type="password"
@@ -99,14 +97,14 @@ function Signin() {
                     </div>
                   </div>
                 </form>
-              </div>
 
-              <div className="user-form user-form--new">
-                <span>new to BidPal? &nbsp;</span>
+                <div className="user-form user-form--new">
+                  <span>new to BidPal? &nbsp;</span>
 
-                <Link to="/signup" className="main-nav-link">
-                  Create an Account
-                </Link>
+                  <Link to="/signup" className="main-nav-link-sign101">
+                    Create an Account
+                  </Link>
+                </div>
               </div>
             </div>
 

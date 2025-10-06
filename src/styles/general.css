@@ -151,10 +151,11 @@ body {
   align-items: center;
   background-color: #fff;
 
-  /* Because we want header to be sticky later */
   height: 9.6rem;
   padding: 0 4.8rem;
+
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .header-left {
   display: flex;
@@ -271,6 +272,7 @@ body {
 
 .section-hero {
   padding: 16rem 0 9.6rem 0;
+  min-height: 100vh;
 }
 
 .hero {
@@ -509,13 +511,66 @@ strong {
 
 .user-box {
   margin: 0 auto;
+  display: block;
+  justify-content: center;
+}
+.user {
+  font-family: Arial, sans-serif;
+  border-width: 1px;
+  width: 100%;
+  max-width: 480px;
 }
 .user-form {
   display: grid;
   gap: 20px; /* space between form elements */
-  max-width: 350px;
+  border: 2px solid #767676; /* visible border */
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #ffffff1a; /* semi-transparent background */
+  margin: 16px auto 0px;
+}
+.user-form.form {
+  gap: 20px;
+}
 
-  font-family: Arial, sans-serif;
+.user-form--new button {
+  flex: 1;
+  padding: 4px 8px;
+  margin: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #000;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.user-form--new button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Active (selected) button */
+.user-form--new button.active {
+  background-color: #000;
+  border-color: #f8f8f8;
+  color: #fff;
+  box-shadow: 0 0 10px #fff;
+}
+
+/* Small responsiveness tweak */
+@media (max-width: 480px) {
+  .user-form--new {
+    flex-direction: column;
+  }
+
+  .user-form--new button {
+    width: 100%;
+    margin: 6px 0;
+  }
 }
 
 /* Each input group */
@@ -581,25 +636,41 @@ input:invalid ~ .error-message {
 .user-form--new {
   margin-top: 25px;
   font-size: 14px;
+  display: flex;
+  border-radius: 10px; /* round corners */
+  padding: 12px; /* optional: space inside the border */
+  width: 100%;
+  height: 48px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .user-form--new span {
   color: #333;
 }
 
-.user-form--new .main-nav-link {
-  background: #f0f0f0;
-  padding: 8px 16px;
+.user-form--new .main-nav-link-sign101 {
   margin-left: 5px;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
-  color: #148a6a;
-  transition: background 0.3s ease;
+  font-family: inherit;
+  font-size: 16px;
+  color: #000;
+  border: none; /* width | style | color */
+  border-radius: 12px;
+  padding: 0.7rem;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
-
-.user-form--new .main-nav-link:hover {
-  background: #e0e0e0;
+.user-form--new span {
+  color: #555;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 14px;
+}
+.main-nav-link-sign101:hover {
+  background: #e6e6e6;
+  color: #000;
 }
 
 .devider {
@@ -728,10 +799,3 @@ input:invalid ~ .error-message {
 /* =========================== */
 /*  (Admin) NAV LINKS  */
 /* =========================== */
-.main-box-nav-link-link101 {
-  color: #fff;
-  text-decoration: none;
-  border-radius: 1px;
-  border-width: 1px;
-  border-color: #fff;
-}

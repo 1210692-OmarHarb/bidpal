@@ -160,8 +160,8 @@ function Signup() {
       <main>
         <section className="section-hero">
           <div className="hero">
-            <div className="hero-text-box signin-box">
-              <h1 className="heading-primary">Create an account</h1>
+            <div className="hero-text-box user-box">
+              <h1 className="heading-primary">Create account</h1>
 
               {successMessage && (
                 <div className="success-message-box">
@@ -175,26 +175,28 @@ function Signup() {
                 </div>
               )}
 
-              <div className="signup-picks">
-                <button
-                  type="button"
-                  onClick={() => setAccountType("personal")}
-                  className={accountType === "personal" ? "active" : ""}
-                >
-                  Personal
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAccountType("organization")}
-                  className={accountType === "organization" ? "active" : ""}
-                >
-                  Organization
-                </button>
+              <div className="user">
+                <div className="user-form user-form--new">
+                  <button
+                    type="button"
+                    onClick={() => setAccountType("personal")}
+                    className={accountType === "personal" ? "active" : ""}
+                  >
+                    Personal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAccountType("organization")}
+                    className={accountType === "organization" ? "active" : ""}
+                  >
+                    Organization
+                  </button>
+                </div>
               </div>
 
-              <div className="user-form">
+              <div className="user">
                 {accountType === "personal" && (
-                  <form className="user-signin-form" onSubmit={handleSubmit}>
+                  <form className="user-form" onSubmit={handleSubmit}>
                     <div className="form-element-firstname">
                       <span>
                         <span className="floating-label">
@@ -246,7 +248,6 @@ function Signup() {
                     <div className="form-element-username">
                       <span>
                         <span className="floating-label">
-                          <label>Username</label>
                           <span className="textbox">
                             <input
                               type="text"
@@ -320,11 +321,10 @@ function Signup() {
                 )}
 
                 {accountType === "organization" && (
-                  <form className="user-signin-form" onSubmit={handleSubmit}>
+                  <form className="user-form" onSubmit={handleSubmit}>
                     <div className="form-element-orgname">
                       <span>
                         <span className="floating-label">
-                          <label>Organization Name</label>
                           <span className="textbox">
                             <input
                               type="text"
@@ -349,7 +349,6 @@ function Signup() {
                     <div className="form-element-orgemail">
                       <span>
                         <span className="floating-label">
-                          <label>Organization Contact Email</label>
                           <span className="textbox">
                             <input
                               type="email"
@@ -373,7 +372,6 @@ function Signup() {
                     <div className="form-element-username">
                       <span>
                         <span className="floating-label">
-                          <label>Username</label>
                           <span className="textbox">
                             <input
                               type="text"
@@ -397,7 +395,6 @@ function Signup() {
                     <div className="form-element-password">
                       <span>
                         <span className="floating-label">
-                          <label>Password</label>
                           <span className="textbox">
                             <input
                               type="password"
@@ -429,7 +426,7 @@ function Signup() {
 
               <div className="user-form user-form--new">
                 <span>already a user? &nbsp;</span>
-                <Link to="/signin" className="main-nav-link">
+                <Link to="/signin" className="main-nav-link-sign101">
                   Sign in
                 </Link>
               </div>

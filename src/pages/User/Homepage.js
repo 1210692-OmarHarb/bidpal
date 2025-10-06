@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import axios from "axios";
 import "../../styles/homePage.css";
 
@@ -27,6 +27,11 @@ function Homepage() {
   const [imageProgress, setImageProgress] = useState(0);
   const [wishlist, setWishlist] = useState(new Set());
   const [sparklingItems, setSparklingItems] = useState(new Set());
+
+  // Search bar states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   // Create flat array of all images from all carousel items
   const allImages = carouselItems.flatMap((item, itemIdx) =>
@@ -132,57 +137,117 @@ function Homepage() {
     });
   };
 
+  // Search functionality
+  const handleSearch = () => {
+    // If only category is selected, navigate to category page
+    if (selectedCategory && !searchQuery && !selectedStatus) {
+      navigate(`/category/${selectedCategory}`);
+    }
+    // If search query or status is involved, navigate to search results
+    else if (searchQuery || selectedStatus) {
+      const params = new URLSearchParams();
+      if (searchQuery) params.append("q", searchQuery);
+      if (selectedCategory) params.append("category", selectedCategory);
+      if (selectedStatus) params.append("status", selectedStatus);
+      navigate(`/search?${params.toString()}`);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   // Featured auctions slider controls
   const nextFeatured = () => {
-    setFeaturedSlideIndex((prev) =>
-      prev + 3 >= featuredAuctions.length ? 0 : prev + 3
-    );
+    setFeaturedSlideIndex((prev) => {
+      const maxIndex = Math.max(0, featuredAuctions.length - 3);
+      if (prev >= maxIndex) {
+        return 0;
+      }
+      return Math.min(prev + 3, maxIndex);
+    });
   };
 
   const prevFeatured = () => {
-    setFeaturedSlideIndex((prev) =>
-      prev - 3 < 0 ? Math.max(0, featuredAuctions.length - 3) : prev - 3
-    );
+    setFeaturedSlideIndex((prev) => {
+      if (prev <= 0) {
+        return Math.max(0, featuredAuctions.length - 3);
+      }
+      return Math.max(0, prev - 3);
+    });
   };
 
   const nextTab = () => {
-    const currentAuctions = tabAuctions[activeTab];
-    setTabSlideIndex((prev) =>
-      prev + 3 >= currentAuctions.length ? 0 : prev + 3
-    );
+    setTabSlideIndex((prev) => {
+      const currentAuctions = tabAuctions[activeTab];
+      const maxIndex = Math.max(0, currentAuctions.length - 3);
+      if (prev >= maxIndex) {
+        return 0;
+      }
+      return Math.min(prev + 3, maxIndex);
+    });
   };
 
   const prevTab = () => {
-    const currentAuctions = tabAuctions[activeTab];
-    setTabSlideIndex((prev) =>
-      prev - 3 < 0 ? Math.max(0, currentAuctions.length - 3) : prev - 3
-    );
+    setTabSlideIndex((prev) => {
+      const currentAuctions = tabAuctions[activeTab];
+      if (prev <= 0) {
+        return Math.max(0, currentAuctions.length - 3);
+      }
+      return Math.max(0, prev - 3);
+    });
   };
+
+  useEffect(() => {
+    setTabSlideIndex(0);
+  }, [activeTab]);
 
   return (
     <>
       <Navigation />
       <div className="homepage">
-        {/* === Search bar === */}
+        {/* === Search Bar === */}
         <div className="auction-search-bar">
-          <input type="text" placeholder="Search auctions..." />
-          <select>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
             <option value="">All Categories</option>
             {categories.map((c) => (
-              <option key={c.categoryID}>{c.name}</option>
+              <option key={c.categoryID} value={c.name}>
+                {c.name}
+              </option>
             ))}
           </select>
-          <select>
+
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+          >
             <option value="">Status</option>
             {statuses.map((s, idx) => (
-              <option key={idx}>{s}</option>
+              <option key={idx} value={s}>
+                {s}
+              </option>
             ))}
           </select>
-          <button className="search-btn">Search</button>
+
+          <input
+            type="text"
+            placeholder="Search auctions..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
+          />
+
+          <button className="search-btn" onClick={handleSearch}>
+            Search
+          </button>
         </div>
 
         {/* === Hero carousel === */}
-
         <div className="groupdiv101">
           {allImages.length > 0 && (
             <section className="hero-carousel">
@@ -305,7 +370,6 @@ function Homepage() {
               className="auction-slider"
               style={{
                 transform: `translateX(-${featuredSlideIndex * (100 / 3)}%)`,
-                transition: "transform 0.3s ease-in-out",
               }}
             >
               {featuredAuctions.map((a) => (
@@ -317,11 +381,9 @@ function Homepage() {
                     onClick={() => handleBid(a.auctionID)}
                   />
 
-                  {/* Category + Title */}
                   <p className="auction-category">{a.categoryName}</p>
                   <h3>{a.title}</h3>
 
-                  {/* Conditional logic */}
                   {a.status === "upcoming" ? (
                     <>
                       <p>

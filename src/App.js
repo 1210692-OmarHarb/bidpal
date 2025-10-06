@@ -32,6 +32,9 @@ import ValidateOrg from "./pages/Admin/ValidateOrg";
 
 import WebSocketTest from "./pages/WebSocketTest";
 
+import CategoryPage from "./pages/User/CategoryPage";
+import SearchResultsPage from "./pages/User/SearchResultsPage";
+
 import "./styles/general.css";
 import "./styles/queries.css";
 import "./styles/pages.css";
@@ -63,6 +66,23 @@ function AppRoutes() {
       <Route path="/home" element={<Home />} />
 
       {/* Customer Routes */}
+
+      <Route
+        path="/category/:categoryName"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <CategoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/search"
+        element={
+          <ProtectedRoute allowedRoles={["user", "organization"]}>
+            <SearchResultsPage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/homepage"
         element={
