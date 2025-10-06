@@ -599,7 +599,7 @@ strong {
 /* Error messages */
 .error-message {
   font-size: 13px;
-  color: #d9534f; /* red */
+  color: #d9534f;
   margin-top: 4px;
   display: none; /* hidden by default */
 }
@@ -609,7 +609,7 @@ strong {
   display: block;
 }
 
-/* Show error (toggle with JS later if needed) */
+/* Show error */
 input:invalid ~ .error-message {
   display: block;
 }

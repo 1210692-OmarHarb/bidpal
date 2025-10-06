@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 import "../../styles/pages.css";
 
 function Notifications() {
-  // Dummy notifications (later these come from DB/API)
+  // Dummy notifications
   const notifications = [
     {
       id: 1,

@@ -58,7 +58,7 @@ function SearchResultsPage() {
       <>
         <Navigation />
         <div className="search-results-page">
-          <div className="error-message">{error}</div>
+          <div className="error-message101">{error}</div>
         </div>
         <Footer />
       </>

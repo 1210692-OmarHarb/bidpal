@@ -30,11 +30,9 @@ router.post("/login", async (req, res) => {
       user.userType === "organization" &&
       user.verificationStatus !== "verified"
     ) {
-      return res
-        .status(403)
-        .json({
-          message: "Your organization account is pending admin approval.",
-        });
+      return res.status(403).json({
+        message: "Your organization account is pending admin approval.",
+      });
     }
 
     // Success: return minimal user info (not password)
