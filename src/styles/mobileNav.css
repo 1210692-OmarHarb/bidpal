@@ -1,0 +1,207 @@
+/* ================================================ */
+/* Mobile Navigation Styles (mobileNav.css) */
+/* ================================================ */
+
+/* Hide mobile menu button on desktop */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 3.2rem;
+  color: #333;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+  z-index: 10000;
+  position: relative;
+}
+
+.mobile-menu-btn:hover {
+  color: #169976;
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.95);
+}
+
+/* Mobile Menu Overlay - Full screen dark overlay */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile Navigation Menu */
+.mobile-nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 75%;
+  max-width: 350px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+  padding: 2rem 0;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+  z-index: 9999;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.mobile-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav-list li {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.6rem 2rem;
+  color: #333;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link:active {
+  background: #f5f5f5;
+  color: #169976;
+  padding-left: 2.5rem;
+}
+
+.mobile-nav-link ion-icon {
+  font-size: 2rem;
+}
+
+.mobile-nav-link.logout-btn {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+.mobile-nav-link.logout-btn:hover {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.mobile-nav-link.nav-cta {
+  background: #169976;
+  color: #ffffff;
+  margin: 1rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  justify-content: center;
+}
+
+.mobile-nav-link.nav-cta:hover {
+  background: #148a6a;
+  padding-left: 1.6rem;
+}
+
+/* ================================================ */
+/* Responsive Media Queries */
+/* ================================================ */
+
+/* Tablet and below - Show mobile menu */
+@media (max-width: 944px) {
+  /* Hide desktop navigation */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Show mobile menu button */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* Show mobile overlay when open */
+  .mobile-menu-overlay {
+    display: block;
+  }
+
+  /* Adjust header layout */
+  .header {
+    padding: 1rem 2rem;
+  }
+
+  .header-left,
+  .header-right {
+    align-items: center;
+  }
+
+  /* Make logo smaller on mobile */
+  .logo {
+    height: 3.5rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 544px) {
+  .mobile-nav {
+    width: 85%;
+  }
+
+  .mobile-nav-link {
+    padding: 1.4rem 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .header {
+    padding: 0.8rem 1.5rem;
+  }
+
+  .logo {
+    height: 3rem;
+  }
+
+  .mobile-menu-btn {
+    font-size: 2.5rem;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .mobile-nav {
+    width: 90%;
+  }
+
+  .mobile-nav-link {
+    padding: 1.2rem 1rem;
+    font-size: 1.4rem;
+  }
+}
