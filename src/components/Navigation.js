@@ -1,14 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Notification from "../pages/User/Notification";
+
+import "../styles/mobileNav.css";
+
 import "../styles/general.css";
 import "../styles/queries.css";
-import "../styles/mobileNav.css";
 
 function Navigation() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const userId = user?.userID;
+  const [showNotifications, setShowNotifications] = useState(false);
+  // Navigation.js
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchNotifications = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/api/notifications/list/${userId}`
+        );
+        const data = await res.json();
+        setNotifications(data.notifications || []);
+        setUnreadCount(
+          (data.notifications || []).filter((n) => n.isRead === 0).length
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchNotifications();
+  }, [userId]);
+
+  const markAsRead = async (notificationID) => {
+    try {
+      await fetch(
+        `http://localhost:5000/api/notifications/mark-read/${notificationID}`,
+        {
+          method: "POST",
+        }
+      );
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n.notificationID === notificationID ? { ...n, isRead: 1 } : n
+        )
+      );
+      setUnreadCount((prev) => prev - 1);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (!userId) return;
+    const fetchUnread = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/api/notifications/unread-count/${userId}`
+        );
+        const data = await res.json();
+        setUnreadCount(data.count || 0);
+      } catch (err) {
+        console.error("Error fetching unread count:", err);
+      }
+    };
+    fetchUnread();
+
+    // Optional: auto-refresh every 30s
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
+  }, [userId]);
+  const toggleNotifications = () => setShowNotifications(!showNotifications);
 
   const handleLogout = () => {
     logout();
@@ -70,6 +138,31 @@ function Navigation() {
             </ul>
           </nav>
         </div>
+        {/* Notifications Sidebar Overlay */}
+        {showNotifications && (
+          <div
+            className="notifications-page-overlay"
+            onClick={() => setShowNotifications(false)}
+          >
+            <div
+              className="notifications-sidebar"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2>Notifications</h2>
+              <p>
+                You have {unreadCount} unread notification
+                {unreadCount !== 1 && "s"}.
+              </p>
+              <Link
+                to="/notification"
+                onClick={() => setShowNotifications(false)}
+                className="btn-open-full"
+              >
+                Open full notifications
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
@@ -159,9 +252,15 @@ function Navigation() {
               </li>
               <li>
                 <Link to="/notification" className="icon-btn">
-                  <ion-icon name="notifications-outline"></ion-icon>
+                  <div className="notification-icon-wrapper">
+                    <ion-icon name="notifications-outline"></ion-icon>
+                    {unreadCount > 0 && (
+                      <span className="notification-badge">{unreadCount}</span>
+                    )}
+                  </div>
                 </Link>
               </li>
+
               <li>
                 <Link to="/profilepage" className="icon-btn">
                   <ion-icon name="person-circle-outline"></ion-icon>
@@ -175,6 +274,31 @@ function Navigation() {
             </ul>
           </nav>
         </div>
+        {/* Notifications Sidebar Overlay */}
+        {showNotifications && (
+          <div
+            className="notifications-page-overlay"
+            onClick={() => setShowNotifications(false)}
+          >
+            <div
+              className="notifications-sidebar"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2>Notifications</h2>
+              <p>
+                You have {unreadCount} unread notification
+                {unreadCount !== 1 && "s"}.
+              </p>
+              <Link
+                to="/notification"
+                onClick={() => setShowNotifications(false)}
+                className="btn-open-full"
+              >
+                Open full notifications
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
@@ -209,15 +333,18 @@ function Navigation() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    className="mobile-nav-link"
-                    to="/notification"
-                    onClick={closeMobileMenu}
-                  >
-                    <ion-icon name="notifications-outline"></ion-icon>{" "}
-                    Notifications
+                  <Link to="/notification" className="icon-btn">
+                    <div className="notification-icon-wrapper">
+                      <ion-icon name="notifications-outline"></ion-icon>
+                      {unreadCount > 0 && (
+                        <span className="notification-badge">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </div>
                   </Link>
                 </li>
+
                 <li>
                   <Link
                     className="mobile-nav-link"
@@ -287,10 +414,23 @@ function Navigation() {
                 </Link>
               </li>
               <li>
-                <Link to="/notification" className="icon-btn">
-                  <ion-icon name="notifications-outline"></ion-icon>
+                <Link
+                  to="#"
+                  className="icon-btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowNotifications(true); // open sidebar if needed
+                  }}
+                >
+                  <div className="notification-icon-wrapper">
+                    <ion-icon name="notifications-outline"></ion-icon>
+                    {unreadCount > 0 && (
+                      <span className="notification-badge">{unreadCount}</span>
+                    )}
+                  </div>
                 </Link>
               </li>
+
               <li>
                 <Link to="/profilepage" className="icon-btn">
                   <ion-icon name="person-circle-outline"></ion-icon>
@@ -304,6 +444,66 @@ function Navigation() {
             </ul>
           </nav>
         </div>
+        {/* Notifications Sidebar Overlay */}
+
+        {showNotifications && (
+          <div
+            className="notifications-page-overlay"
+            onClick={() => setShowNotifications(false)}
+          >
+            <div
+              className="notifications-sidebar"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="notifications-header">
+                <h2>Notifications</h2>
+                <button
+                  className="btn-close-sidebar"
+                  onClick={() => setShowNotifications(false)}
+                >
+                  ✕
+                </button>
+              </div>
+              <button
+                className="btn-full-notifications"
+                onClick={() => {
+                  setShowNotifications(false);
+                  navigate("/notification");
+                }}
+              >
+                See full notifications
+                <span className="notification-badge2">{unreadCount}</span>{" "}
+              </button>
+              <ul className="notifications-preview-list">
+                {notifications.slice(0, 5).map((note) => (
+                  <li
+                    key={note.notificationID}
+                    className={`notification-preview-item ${
+                      note.isRead
+                        ? "read"
+                        : note.relatedAuctionID
+                        ? "unread-auction"
+                        : "unread-other"
+                    }`}
+                  >
+                    <Link
+                      to="/notification"
+                      className="notification-link"
+                      onClick={() => {
+                        markAsRead(note.notificationID);
+                        setShowNotifications(false); // close sidebar
+                      }}
+                    >
+                      <li className="notification-preview-item">
+                        <strong>{note.title}</strong>
+                      </li>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
 
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
@@ -347,15 +547,18 @@ function Navigation() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    className="mobile-nav-link"
-                    to="/notification"
-                    onClick={closeMobileMenu}
-                  >
-                    <ion-icon name="notifications-outline"></ion-icon>{" "}
-                    Notifications
+                  <Link to="/notification" className="icon-btn">
+                    <div className="notification-icon-wrapper">
+                      <ion-icon name="notifications-outline"></ion-icon>
+                      {unreadCount > 0 && (
+                        <span className="notification-badge">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </div>
                   </Link>
                 </li>
+
                 <li>
                   <Link
                     className="mobile-nav-link"
@@ -415,6 +618,59 @@ function Navigation() {
           </ul>
         </nav>
       </div>
+      {/* Notifications Sidebar Overlay */}
+      {showNotifications && (
+        <div
+          className="notifications-page-overlay"
+          onClick={() => setShowNotifications(false)}
+        >
+          <div
+            className="notifications-sidebar"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="notifications-header">
+              <h2>Notifications</h2>
+              <button
+                className="btn-close-sidebar"
+                onClick={() => setShowNotifications(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <button
+              className="btn-full-notifications"
+              onClick={() => {
+                setShowNotifications(false);
+                navigate("/notification"); // navigate to full page
+              }}
+            >
+              See full notifications
+            </button>
+
+            {notifications.length === 0 ? (
+              <p className="empty-msg">No notifications</p>
+            ) : (
+              <ul className="notifications-list-sidebar">
+                {notifications.map((note) => (
+                  <li
+                    key={note.notificationID}
+                    className={`notification-card-sidebar ${
+                      note.isRead
+                        ? "read"
+                        : note.relatedAuctionID
+                        ? "unread-auction"
+                        : "unread-other"
+                    }`}
+                    onClick={() => markAsRead(note.notificationID)}
+                  >
+                    {note.title}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (

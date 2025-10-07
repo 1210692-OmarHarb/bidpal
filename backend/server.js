@@ -17,6 +17,7 @@ import verifyRoutes from "./routes/verifyRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
+import notificationsRoutes from "./routes/notificationsRoutes.js";
 
 import "./routes/cronJobs.js";
 
@@ -37,6 +38,7 @@ app.use("/api/signup", signupRoutes);
 app.use("/api/org-signup", orgSignupRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/notifications", notificationsRoutes);
 
 app.listen(5000, () => {
   console.log("✅ Server running on http://localhost:5000");

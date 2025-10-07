@@ -961,6 +961,183 @@ li {
   border-left: 5px solid #9c27b0;
 }
 
+.notifications-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-card {
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.notification-card.unread-auction {
+  background-color: #cce5ff; /* blue */
+  color: #000;
+}
+
+.notification-card.unread-other {
+  background-color: #f8d7da; /* red */
+  color: #000;
+}
+
+.notification-card.read {
+  background-color: #e2e3e5; /* grey */
+  color: #555;
+}
+
+.notification-card:hover {
+  opacity: 0.9;
+}
+
+.notification-time {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Overlay */
+.notifications-page-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* see-through background */
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end; /* sidebar slides in from right */
+}
+
+/* Sidebar */
+.notifications-sidebar {
+  width: 50%; /* half-width */
+  max-width: 400px;
+  height: 100%;
+  background: #fff;
+  padding: 1rem 2rem;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+.notification-card {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.notifications-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.notification-card.unread.auction-type {
+  background-color: #cce5ff; /* blue for auction/bid notifications */
+}
+
+.notification-card.unread.other-type {
+  background-color: #f8d7da; /* red for other types */
+}
+
+.notification-card.read {
+  background-color: #e2e3e5; /* grey when read */
+  color: #333;
+}
+
+.notification-card:hover {
+  opacity: 0.9;
+}
+
+/* Overlay background */
+.notifications-page-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Sidebar */
+.notifications-sidebar {
+  width: 300px;
+  max-width: 80%;
+  background: #fff;
+  height: 100%;
+  padding: 16px;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header with close button */
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.btn-close-sidebar {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Full notifications button */
+.btn-full-notifications {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* List */
+.notifications-preview-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each notification */
+.notification-preview-item {
+  padding: 8px 4px;
+  border-bottom: 1px solid #eee;
+  text-decoration: none;
+  text-underline-offset: none;
+}
+
+/* Links inside notifications */
+.notification-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.notification-link:hover {
+  color: #007bff;
+}
+
 /* =========================== */
 /* Reports Dashboard (Admin)   */
 /* =========================== */
